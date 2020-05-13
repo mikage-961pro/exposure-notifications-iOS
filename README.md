@@ -1,4 +1,7 @@
+![dims](https://user-images.githubusercontent.com/50665049/81815489-00731900-9565-11ea-8f0b-c971ee36409b.jpeg)
+
 # Building an App to Notify Users of COVID-19 Exposure
+
 
 Inform people when they may have been exposed to COVID-19.
 
