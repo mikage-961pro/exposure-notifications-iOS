@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="iN0-l3-epB" customClass="ExposureDetailsView" customModule="ExposureNotificationApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="438"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="04i-Fu-gbh" customClass="SeparatorView" customModule="ExposureNotificationApp" customModuleProvider="target">
+                    <rect key="frame" x="20" y="0.0" width="380" height="1"/>
+                    <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" placeholder="YES" id="l4z-qS-Jxe"/>
+                    </constraints>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Mor-5h-HdA">
+                    <rect key="frame" x="20" y="17" width="360" height="150"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DETAILS" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EwJ-dJ-tuI">
+                            <rect key="frame" x="0.0" y="0.0" width="59" height="18"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="RHX-rM-tyk">
+                            <rect key="frame" x="0.0" y="34" width="313" height="116"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="WKf-fX-7JX">
+                                    <rect key="frame" x="0.0" y="0.0" width="313" height="57.5"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.seal.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="O9c-xP-zMK">
+                                            <rect key="frame" x="0.0" y="-0.5" width="22.5" height="21.5"/>
+                                            <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font">
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            </preferredSymbolConfiguration>
+                                        </imageView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="AJZ-Z0-znl">
+                                            <rect key="frame" x="38.5" y="0.0" width="274.5" height="57.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This person’s diagnosis was verified" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="13k-X3-Nc4">
+                                                    <rect key="frame" x="0.0" y="0.0" width="274.5" height="20.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nI7-kV-X3b" customClass="Button" customModule="ExposureNotificationApp" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="24.5" width="87" height="33"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <state key="normal" title="Learn more"/>
+                                                </button>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Kj7-qF-xo6">
+                                    <rect key="frame" x="0.0" y="73.5" width="308.5" height="42.5"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OIe-rU-Tde">
+                                            <rect key="frame" x="0.0" y="1" width="21" height="17.5"/>
+                                            <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font">
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            </preferredSymbolConfiguration>
+                                        </imageView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Mqw-JQ-mjR">
+                                            <rect key="frame" x="37" y="0.0" width="271.5" height="42.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You were near this person on {April 23, 2020}" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SoK-sm-aTB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="271.5" height="42.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                </stackView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a9l-gy-hn8" customClass="SeparatorView" customModule="ExposureNotificationApp" customModuleProvider="target">
+                    <rect key="frame" x="20" y="183" width="380" height="1"/>
+                    <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" placeholder="YES" id="u9F-ol-3Ot"/>
+                    </constraints>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="5wK-Ef-Ogp">
+                    <rect key="frame" x="20" y="200" width="360" height="164.5"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NEXT STEPS" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0n-eX-gOo">
+                            <rect key="frame" x="0.0" y="0.0" width="89" height="18"/>
+                            <accessibility key="accessibilityConfiguration">
+                                <accessibilityTraits key="traits" staticText="YES" header="YES"/>
+                            </accessibility>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ROD-d5-C4A">
+                            <rect key="frame" x="0.0" y="34" width="289.5" height="130.5"/>
+                            <string key="text">{Actual copy to be provided by Public Health Authority}
+
+
+
+</string>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                            <color key="textColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QSS-0S-NYd" customClass="SeparatorView" customModule="ExposureNotificationApp" customModuleProvider="target">
+                    <rect key="frame" x="20" y="380.5" width="380" height="1"/>
+                    <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" placeholder="YES" id="REu-Wc-Uow"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This report has been saved to this app and you can access it at any time in the future." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beb-Rj-16q">
+                    <rect key="frame" x="20" y="397.5" width="360" height="40.5"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="QSS-0S-NYd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="6ey-ru-UnO"/>
+                <constraint firstItem="beb-Rj-16q" firstAttribute="top" secondItem="QSS-0S-NYd" secondAttribute="bottom" constant="16" id="Dct-YT-Pp5"/>
+                <constraint firstItem="Mor-5h-HdA" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="KUM-b5-Pkd"/>
+                <constraint firstItem="5wK-Ef-Ogp" firstAttribute="top" secondItem="a9l-gy-hn8" secondAttribute="bottom" constant="16" id="T9E-su-yX6"/>
+                <constraint firstAttribute="bottom" secondItem="beb-Rj-16q" secondAttribute="bottom" id="ZuX-vi-JLO"/>
+                <constraint firstAttribute="trailingMargin" secondItem="Mor-5h-HdA" secondAttribute="trailing" id="bWm-Cu-lJf"/>
+                <constraint firstItem="Mor-5h-HdA" firstAttribute="top" secondItem="04i-Fu-gbh" secondAttribute="bottom" constant="16" id="bwa-uz-VmC"/>
+                <constraint firstItem="a9l-gy-hn8" firstAttribute="top" secondItem="Mor-5h-HdA" secondAttribute="bottom" constant="16" id="c13-sL-3nh"/>
+                <constraint firstItem="a9l-gy-hn8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="du6-XH-QeW"/>
+                <constraint firstItem="04i-Fu-gbh" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="hUf-TV-RQk"/>
+                <constraint firstItem="5wK-Ef-Ogp" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="hyr-Ax-PEC"/>
+                <constraint firstAttribute="trailingMargin" secondItem="beb-Rj-16q" secondAttribute="trailing" id="lsm-NV-j6x"/>
+                <constraint firstAttribute="trailingMargin" secondItem="5wK-Ef-Ogp" secondAttribute="trailing" id="n6E-AD-qba"/>
+                <constraint firstAttribute="trailing" secondItem="a9l-gy-hn8" secondAttribute="trailing" id="ojb-sV-My9"/>
+                <constraint firstAttribute="trailing" secondItem="04i-Fu-gbh" secondAttribute="trailing" id="sid-6s-poM"/>
+                <constraint firstAttribute="trailing" secondItem="QSS-0S-NYd" secondAttribute="trailing" id="ttF-Ac-psl"/>
+                <constraint firstItem="beb-Rj-16q" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="w3d-Hv-yVo"/>
+                <constraint firstItem="04i-Fu-gbh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="wdd-lQ-fAY"/>
+                <constraint firstItem="QSS-0S-NYd" firstAttribute="top" secondItem="5wK-Ef-Ogp" secondAttribute="bottom" constant="16" id="zyE-E9-TND"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="exposureDateLabel" destination="SoK-sm-aTB" id="pfK-Ag-o1P"/>
+                <outlet property="learnMoreButton" destination="nI7-kV-X3b" id="boX-rl-Ei9"/>
+            </connections>
+            <point key="canvasLocation" x="244.92753623188409" y="138.61607142857142"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="calendar" catalog="system" width="128" height="106"/>
+        <image name="checkmark.seal.fill" catalog="system" width="128" height="122"/>
+    </resources>
+</document>

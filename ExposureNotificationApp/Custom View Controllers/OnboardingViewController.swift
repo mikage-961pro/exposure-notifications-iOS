@@ -1,0 +1,143 @@
+/*
+See LICENSE folder for this sample’s licensing information.
+
+Abstract:
+View controllers used in the onboarding workflow.
+*/
+
+import UIKit
+import ExposureNotification
+
+class OnboardingViewController: StepNavigationController {
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        pushViewController(WelcomeViewController.make(), animated: false)
+    }
+    
+    init?(rootViewController: StepViewController, coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        pushViewController(rootViewController, animated: false)
+    }
+    
+    class WelcomeViewController: StepViewController {
+        override var step: Step {
+            Step(
+                title: NSLocalizedString("WELCOME_TITLE", comment: "Title"),
+                text: NSLocalizedString("WELCOME_TEXT", comment: "Text"),
+                buttons: [Step.Button(title: NSLocalizedString("GET_STARTED", comment: "Button"), isProminent: true, action: {
+                    self.show(EnableExposureNotificationsViewController.make(), sender: nil)
+                })]
+            )
+        }
+    }
+    
+    class EnableExposureNotificationsViewController: StepViewController {
+        var requirementsView: RequirementView!
+        
+        override var step: Step {
+            Step(
+                title: NSLocalizedString("ENABLE_EXPOSURE_TITLE", comment: "Title"),
+                text: NSLocalizedString("ENABLE_EXPOSURE_TEXT", comment: "Text"),
+                customView: requirementsView,
+                isModal: false,
+                buttons: [
+                    Step.Button(title: NSLocalizedString("CONTINUE", comment: "Button"), isProminent: true, action: {
+                        enableExposureNotifications(from: self)
+                    }),
+                    Step.Button(title: NSLocalizedString("DONT_ENABLE", comment: "Button"), action: {
+                        self.show(ExposureNotificationsAreStronglyRecommendedViewController.make(), sender: nil)
+                    })
+                ]
+            )
+        }
+        
+        override func viewDidLoad() {
+            requirementsView = RequirementView(text: NSLocalizedString("ENABLE_EXPOSURE_REQUIREMENT_TEXT", comment: "Requirement text"))
+            super.viewDidLoad()
+            NSLayoutConstraint.activate([
+                requirementsView.widthAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.widthAnchor)
+            ])
+        }
+    }
+    
+    class ExposureNotificationsAreStronglyRecommendedViewController: StepViewController {
+        override var step: Step {
+            Step(
+                hidesNavigationBackButton: true,
+                title: NSLocalizedString("RECOMMEND_EXPOSURE_TITLE", comment: "Title"),
+                text: NSLocalizedString("RECOMMEND_EXPOSURE_TEXT", comment: "Text"),
+                buttons: [
+                    Step.Button(title: NSLocalizedString("ENABLE", comment: "Button"), isProminent: true, action: {
+                        enableExposureNotifications(from: self)
+                    }),
+                    Step.Button(title: NSLocalizedString("DONT_ENABLE", comment: "Button"), action: {
+                        (self.presentingViewController as! UITabBarController).selectedIndex = 0
+                        finishOnboarding(from: self)
+                    })
+                ]
+            )
+        }
+    }
+    
+    static func enableExposureNotifications(from viewController: UIViewController) {
+        ExposureManager.shared.manager.setExposureNotificationEnabled(true) { error in
+            NotificationCenter.default.post(name: ExposureManager.authorizationStatusChangeNotification, object: nil)
+            if let error = error as? ENError, error.code == .notAuthorized {
+                viewController.show(ExposureNotificationsAreStronglyRecommendedSettingsViewController.make(), sender: nil)
+            } else if let error = error {
+                showError(error, from: viewController)
+            } else {
+                (UIApplication.shared.delegate as! AppDelegate).scheduleBackgroundTaskIfNeeded()
+                viewController.show(NotifyingOthersViewController.make(independent: false), sender: nil)
+            }
+        }
+    }
+    
+    class ExposureNotificationsAreStronglyRecommendedSettingsViewController: StepViewController {
+        override var step: Step {
+            Step(
+                hidesNavigationBackButton: true,
+                title: NSLocalizedString("RECOMMEND_EXPOSURE_TITLE", comment: "Title"),
+                text: NSLocalizedString("RECOMMEND_EXPOSURE_TEXT", comment: "Text"),
+                buttons: [
+                    Step.Button(title: NSLocalizedString("GO_TO_SETTINGS", comment: "Button"), isProminent: true, action: {
+                        openSettings(from: self)
+                    }),
+                    Step.Button(title: NSLocalizedString("DONT_ENABLE", comment: "Button"), action: {
+                        finishOnboarding(from: self)
+                    })
+                ]
+            )
+        }
+    }
+    
+    class NotifyingOthersViewController: ValueStepViewController<Bool> {
+        
+        var independent: Bool { value } // Whether this view controller is being shown outside the normal onboarding flow
+        
+        static func make(independent: Bool) -> Self {
+            return make(value: independent)
+        }
+        
+        override var step: Step {
+            Step(
+                hidesNavigationBackButton: true,
+                rightBarButton: independent ? .init(item: .done) {
+                    self.dismiss(animated: true, completion: nil)
+                } : nil,
+                title: NSLocalizedString("NOTIFYING_OTHERS_TITLE", comment: "Title"),
+                text: NSLocalizedString("NOTIFYING_OTHERS_TEXT", comment: "Text"),
+                isModal: false,
+                buttons: independent ? [] : [Step.Button(title: NSLocalizedString("DONE", comment: "Button"), isProminent: true, action: {
+                    finishOnboarding(from: self)
+                })]
+            )
+        }
+    }
+    
+    static func finishOnboarding(from viewController: UIViewController) {
+        LocalStore.shared.isOnboarded = true
+        viewController.dismiss(animated: true, completion: nil)
+    }
+}
