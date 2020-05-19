@@ -1,9 +1,4 @@
-![dims](https://user-images.githubusercontent.com/50665049/81815489-00731900-9565-11ea-8f0b-c971ee36409b.jpeg)
-
-### Because the new version is still in beta, the above is for reference only, some information is also requested to determine the authenticity.
-
 # Building an App to Notify Users of COVID-19 Exposure
-
 
 Inform people when they may have been exposed to COVID-19.
 
@@ -70,12 +65,12 @@ static func enableExposureNotifications(from viewController: UIViewController) {
     ExposureManager.shared.manager.setExposureNotificationEnabled(true) { error in
         NotificationCenter.default.post(name: ExposureManager.authorizationStatusChangeNotification, object: nil)
         if let error = error as? ENError, error.code == .notAuthorized {
-            viewController.show(ExposureNotificationsAreStronglyRecommendedSettingsViewController.make(), sender: nil)
+            viewController.show(RecommendExposureNotificationsSettingsViewController.make(), sender: nil)
         } else if let error = error {
             showError(error, from: viewController)
         } else {
             (UIApplication.shared.delegate as! AppDelegate).scheduleBackgroundTaskIfNeeded()
-            viewController.show(NotifyingOthersViewController.make(independent: false), sender: nil)
+            enablePushNotifications(from: viewController)
         }
     }
 }
@@ -154,11 +149,13 @@ The sample app demonstrates a strategy in which a recognized medical authority t
 When the user provides information about a positive test result, the app records the test result in the local store and asks the user to share it. To share the result, the app needs to get a list of diagnosis keys and send the list to the server. To get the keys, the app calls the singleton `ENManager` object's [`getDiagnosisKeys(completionHandler:)`][getDiagnosisKeysWithCompletionHandler] method, as shown in the code below.
 
 ``` swift
-func getAndPostDiagnosisKeys(completion: @escaping (Error?) -> Void) {
+func getAndPostDiagnosisKeys(testResult: TestResult, completion: @escaping (Error?) -> Void) {
     manager.getDiagnosisKeys { temporaryExposureKeys, error in
         if let error = error {
             completion(error)
         } else {
+            // In this sample app, transmissionRiskLevel isn't set for any of the diagnosis keys. However, it is at this point that an app could
+            // use information accumulated in testResult to determine a transmissionRiskLevel for each diagnosis key.
             Server.shared.postDiagnosisKeys(temporaryExposureKeys!) { error in
                 completion(error)
             }
@@ -213,26 +210,24 @@ func scheduleBackgroundTaskIfNeeded() {
 First, the background task provides a handler in case it runs out of time. Then it calls the app's `detectExposures` method to test for exposures. Finally, it schedules the next time the system should execute the background task.
 
 ``` swift
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: AppDelegate.backgroundTaskIdentifier, using: .main) { task in
-        
-        // Perform the exposure detection
-        let progress = ExposureManager.shared.detectExposures { success in
-            task.setTaskCompleted(success: success)
-        }
-        
-        // Handle running out of time
-        task.expirationHandler = {
-            progress.cancel()
-            LocalStore.shared.exposureDetectionErrorLocalizedDescription = NSLocalizedString("BACKGROUND_TIMEOUT", comment: "Error")
-        }
-        
-        // Schedule the next background task
-        self.scheduleBackgroundTaskIfNeeded()
+BGTaskScheduler.shared.register(forTaskWithIdentifier: AppDelegate.backgroundTaskIdentifier, using: .main) { task in
+    
+    // Notify the user if bluetooth is off
+    ExposureManager.shared.showBluetoothOffUserNotificationIfNeeded()
+    
+    // Perform the exposure detection
+    let progress = ExposureManager.shared.detectExposures { success in
+        task.setTaskCompleted(success: success)
     }
     
-    scheduleBackgroundTaskIfNeeded()
+    // Handle running out of time
+    task.expirationHandler = {
+        progress.cancel()
+        LocalStore.shared.exposureDetectionErrorLocalizedDescription = NSLocalizedString("BACKGROUND_TIMEOUT", comment: "Error")
+    }
     
-    return true
+    // Schedule the next background task
+    self.scheduleBackgroundTaskIfNeeded()
 }
 ```
 
@@ -251,7 +246,7 @@ let nextDiagnosisKeyFileIndex = LocalStore.shared.nextDiagnosisKeyFileIndex
 Server.shared.getDiagnosisKeyFileURLs(startingAt: nextDiagnosisKeyFileIndex) { result in
     
     let dispatchGroup = DispatchGroup()
-    var localURLResults = [Result<URL, Error>]()
+    var localURLResults = [Result<[URL], Error>]()
     
     switch result {
     case let .success(remoteURLs):
@@ -274,8 +269,8 @@ Finally, the app creates an array of the local URLs for the downloaded files.
 dispatchGroup.notify(queue: .main) {
     for result in localURLResults {
         switch result {
-        case let .success(localURL):
-            localURLs.append(localURL)
+        case let .success(urls):
+            localURLs.append(contentsOf: urls)
         case let .failure(error):
             finish(.failure(error))
             return
@@ -287,21 +282,18 @@ dispatchGroup.notify(queue: .main) {
 
 The framework will compare locally saved interaction data against the diagnosis keys provided by the app. When the framework finds a match, it calculates a risk score for that interaction based on a number of different factors, such as when the interaction took place and how long the devices were in proximity to each other.
 
-To provide specific guidance to the framework about how risk should be evaluated, the app creates an [`ENExposureConfiguration`][ENExposureConfiguration] object. The app requests the criteria from the `Server` object, which creates and returns an `ENExposureConfiguration` object as shown below.
+To provide specific guidance to the framework about how risk should be evaluated, the app creates an [`ENExposureConfiguration`][ENExposureConfiguration] object. The app requests the criteria from the `Server` object, which creates and returns an `ENExposureConfiguration` object as shown below. The sample configuration has placeholder data that evaluates any interaction as risky, so the framework returns all interactions that match the diagnostic keys.
 
 ``` swift
 func getExposureConfiguration(completion: (Result<ENExposureConfiguration, Error>) -> Void) {
     
     let dataFromServer = """
     {"minimumRiskScore":0,
+    "attenuationDurationThresholds":[50, 70],
     "attenuationLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-    "attenuationWeight":50,
     "daysSinceLastExposureLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-    "daysSinceLastExposureWeight":50,
     "durationLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-    "durationWeight":50,
-    "transmissionRiskLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-    "transmissionRiskWeight":50}
+    "transmissionRiskLevelValues":[1, 2, 3, 4, 5, 6, 7, 8]}
     """.data(using: .utf8)!
     
     do {
@@ -309,13 +301,10 @@ func getExposureConfiguration(completion: (Result<ENExposureConfiguration, Error
         let exposureConfiguration = ENExposureConfiguration()
         exposureConfiguration.minimumRiskScore = codableExposureConfiguration.minimumRiskScore
         exposureConfiguration.attenuationLevelValues = codableExposureConfiguration.attenuationLevelValues as [NSNumber]
-        exposureConfiguration.attenuationWeight = codableExposureConfiguration.attenuationWeight
         exposureConfiguration.daysSinceLastExposureLevelValues = codableExposureConfiguration.daysSinceLastExposureLevelValues as [NSNumber]
-        exposureConfiguration.daysSinceLastExposureWeight = codableExposureConfiguration.daysSinceLastExposureWeight
         exposureConfiguration.durationLevelValues = codableExposureConfiguration.durationLevelValues as [NSNumber]
-        exposureConfiguration.durationWeight = codableExposureConfiguration.durationWeight
         exposureConfiguration.transmissionRiskLevelValues = codableExposureConfiguration.transmissionRiskLevelValues as [NSNumber]
-        exposureConfiguration.transmissionRiskWeight = codableExposureConfiguration.transmissionRiskWeight
+        exposureConfiguration.metadata = ["attenuationDurationThresholds": codableExposureConfiguration.attenuationDurationThresholds]
         completion(.success(exposureConfiguration))
     } catch {
         completion(.failure(error))

@@ -102,17 +102,41 @@ class StepNavigationController: UINavigationController {
     }
 }
 
-class StepViewController: UIViewController, UITextViewDelegate {
+// Specify an enum type for CustomItem if custom cells are needed for a CustomStepViewController subclass
+// If custom cells are not needed for a CustomStepViewController subclass, specify Never, or subclass StepViewController
+class CustomStepViewController<CustomItem: Hashable>: UIViewController, UITableViewDelegate, UITextViewDelegate {
     
-    var step: Step {
-        preconditionFailure("Must override step.")
-    }
+    // Customization points for subclasses
     
     static func make() -> Self {
         return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "Step", creator: { coder -> Self? in
             return Self(coder: coder)
         })
     }
+    
+    var step: Step {
+        preconditionFailure("Must override step")
+    }
+    
+    var textCellHidesSeparator: Bool { true }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, customItem: CustomItem) -> UITableViewCell {
+        preconditionFailure("Must override if using CustomItem")
+    }
+    
+    func modifySnapshot(_ snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>) {
+        // For subclasses
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // For subclasses
+    }
+    
+    // Private implementation details
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -124,30 +148,98 @@ class StepViewController: UIViewController, UITextViewDelegate {
         isModalInPresentation = step.isModal
     }
     
-    @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet var stackView: UIStackView!
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var textView: UITextView!
+    deinit {
+        for observer in observers {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+    
+    var observers = [NSObjectProtocol]()
+    var keyboardHeight: CGFloat = 0.0 {
+        didSet {
+            view.setNeedsLayout()
+        }
+    }
+    
+    @IBOutlet var tableView: UITableView!
     @IBOutlet var buttonBackgroundView: UIView!
     @IBOutlet var buttonStackView: UIStackView!
     @IBOutlet var button0: PlatterButton!
     @IBOutlet var button1: PlatterButton!
     
+    enum Section: Int {
+        case main
+    }
+    
+    enum Item: Hashable {
+        case title
+        case text
+        case customView
+        case custom(CustomItem)
+    }
+    
+    var dataSource: UITableViewDiffableDataSource<Section, Item>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        titleLabel.text = step.title
-        titleLabel.accessibilityTraits = .header
-        textView.attributedText = step.text
-        textView.textContainerInset = .zero
-        textView.textContainer.lineFragmentPadding = 0.0
-        if let customView = step.customView {
-            stackView.addArrangedSubview(customView)
-        }
+        tableView.tableFooterView = UIView()
+        tableView.register(StepOptionalSeparatorCell.self, forCellReuseIdentifier: "CustomView")
+        dataSource = UITableViewDiffableDataSource(tableView: tableView, cellProvider: { [unowned self] tableView, indexPath, item in
+            switch item {
+            case .title:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Title", for: indexPath) as! StepTitleCell
+                cell.titleLabel.text = self.step.title
+                return cell
+            case .text:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Text", for: indexPath) as! StepTextCell
+                cell.hidesSeparator = self.textCellHidesSeparator
+                cell.textView.attributedText = self.step.text
+                return cell
+            case .customView:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CustomView", for: indexPath)
+                let customView = self.step.customView!
+                customView.translatesAutoresizingMaskIntoConstraints = false
+                cell.contentView.addSubview(customView)
+                NSLayoutConstraint.activate([
+                    cell.contentView.layoutMarginsGuide.leadingAnchor.constraint(equalTo: customView.leadingAnchor),
+                    cell.contentView.layoutMarginsGuide.trailingAnchor.constraint(equalTo: customView.trailingAnchor),
+                    cell.contentView.topAnchor.constraint(equalTo: customView.topAnchor),
+                    cell.contentView.bottomAnchor.constraint(equalTo: customView.bottomAnchor, constant: 16.0)
+                ])
+                return cell
+            case let .custom(customItem):
+                return self.tableView(tableView, cellForRowAt: indexPath, customItem: customItem)
+            }
+        })
+        dataSource.defaultRowAnimation = .fade
+        updateTableView(animated: false)
         
         buttonBackgroundView.isHidden = step.buttons.isEmpty
-        
         updateButtons()
+        
+        let keyboardWillChange = UIResponder.keyboardWillChangeFrameNotification
+        observers.append(NotificationCenter.default.addObserver(forName: keyboardWillChange, object: nil, queue: nil) { [unowned self] notification in
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect, let window = self.view.window {
+                self.keyboardHeight = keyboardFrame.intersection(window.bounds).height
+            } else {
+                self.keyboardHeight = 0.0
+            }
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    func updateTableView(animated: Bool, reloading items: [Item] = []) {
+        guard isViewLoaded else { return }
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.main])
+        snapshot.appendItems([.title, .text], toSection: .main)
+        if step.customView != nil {
+            snapshot.appendItems([.customView], toSection: .main)
+        }
+        modifySnapshot(&snapshot)
+        snapshot.reloadItems(items)
+        dataSource.apply(snapshot, animatingDifferences: tableView.window != nil ? animated : false)
     }
     
     func updateButtons() {
@@ -175,18 +267,12 @@ class StepViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    var scrollViewBottomInset: CGFloat {
-        let buttonStackHeight = buttonStackView.frame.height
-        return buttonStackHeight == 0.0 ? 0.0 : buttonStackHeight + 32.0
-    }
-    
-    var scrollViewBottomIndicatorInset: CGFloat {
-        return scrollViewBottomInset
-    }
-    
     override func viewDidLayoutSubviews() {
-        scrollView.contentInset.bottom = scrollViewBottomInset
-        scrollView.verticalScrollIndicatorInsets.bottom = scrollViewBottomIndicatorInset
+        let buttonStackHeight = buttonStackView.frame.height
+        let effectiveButtonStackHeight = buttonStackHeight == 0.0 ? 0.0 : buttonStackHeight + 32.0
+        let effectiveKeyboardHeight = keyboardHeight - self.view.safeAreaInsets.bottom
+        tableView.contentInset.bottom = max(effectiveButtonStackHeight, effectiveKeyboardHeight + 32.0)
+        tableView.verticalScrollIndicatorInsets.bottom = max(effectiveButtonStackHeight, effectiveKeyboardHeight)
     }
     
     @objc
@@ -207,7 +293,47 @@ class StepViewController: UIViewController, UITextViewDelegate {
     }
 }
 
-class ValueStepViewController<Value>: StepViewController {
+class StepViewController: CustomStepViewController<Never> {}
+
+class StepOptionalSeparatorCell: UITableViewCell {
+    var hidesSeparator = true {
+        didSet {
+            setNeedsLayout()
+        }
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if hidesSeparator {
+            switch effectiveUserInterfaceLayoutDirection {
+            case .rightToLeft:
+                separatorInset = UIEdgeInsets(top: 0.0, left: .greatestFiniteMagnitude, bottom: 0.0, right: 0.0)
+            default:
+                separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: .greatestFiniteMagnitude)
+            }
+        }
+    }
+}
+
+class StepTitleCell: StepOptionalSeparatorCell {
+    @IBOutlet var titleLabel: UILabel!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        let titleFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title1).withSymbolicTraits(.traitBold)!
+        titleLabel.font = UIFont(descriptor: titleFontDescriptor, size: 0.0)
+        titleLabel.accessibilityTraits = .header
+    }
+}
+
+class StepTextCell: StepOptionalSeparatorCell {
+    @IBOutlet var textView: UITextView!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0.0
+    }
+}
+
+class ValueStepViewController<Value, CustomItem: Hashable>: CustomStepViewController<CustomItem> {
     var value: Value
     required init?(value: Value, coder: NSCoder) {
         self.value = value

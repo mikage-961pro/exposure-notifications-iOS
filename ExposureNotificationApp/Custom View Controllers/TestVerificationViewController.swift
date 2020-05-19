@@ -17,12 +17,12 @@ class TestVerificationViewController: StepNavigationController {
         pushViewController(BeforeYouGetStartedViewController.make(testResultID: testResult.id), animated: false)
     }
     
-    init?(rootViewController: TestStepViewController, coder aDecoder: NSCoder) {
+    init?<CustomItem: Hashable>(rootViewController: TestStepViewController<CustomItem>, coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         pushViewController(rootViewController, animated: false)
     }
     
-    class TestStepViewController: ValueStepViewController<UUID> {
+    class TestStepViewController<CustomItem: Hashable>: ValueStepViewController<UUID, CustomItem> {
         var testResultID: UUID { value }
         var testResult: TestResult {
             get { LocalStore.shared.testResults[value]! }
@@ -33,7 +33,7 @@ class TestVerificationViewController: StepNavigationController {
         }
     }
     
-    class BeforeYouGetStartedViewController: TestStepViewController {
+    class BeforeYouGetStartedViewController: TestStepViewController<Never> {
         var requirementsView: RequirementView!
         
         override var step: Step {
@@ -54,25 +54,13 @@ class TestVerificationViewController: StepNavigationController {
         override func viewDidLoad() {
             requirementsView = RequirementView(text: NSLocalizedString("VERIFICATION_START_REQUIREMENT_TEXT", comment: "Requirement text"))
             super.viewDidLoad()
-            NSLayoutConstraint.activate([
-                requirementsView.widthAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.widthAnchor)
-            ])
         }
     }
     
-    class TestIdentifierViewController: TestStepViewController {
+    class TestIdentifierViewController: TestStepViewController<Never> {
         
         var customStackView: UIStackView!
         var entryView: EntryView!
-        
-        var keyboardHeight: CGFloat = 0.0
-        var observers = [NSObjectProtocol]()
-        
-        deinit {
-            for observer in observers {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
         
         override func viewDidLoad() {
             entryView = EntryView()
@@ -93,29 +81,6 @@ class TestVerificationViewController: StepNavigationController {
             customStackView.spacing = 16.0
             
             super.viewDidLoad()
-            
-            NSLayoutConstraint.activate([
-                customStackView.widthAnchor.constraint(equalTo: stackView.layoutMarginsGuide.widthAnchor)
-            ])
-            
-            let keyboardWillChange = UIResponder.keyboardWillChangeFrameNotification
-            observers.append(NotificationCenter.default.addObserver(forName: keyboardWillChange, object: nil, queue: nil, using: { notification in
-                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect, let window = self.view.window {
-                    self.keyboardHeight = keyboardFrame.intersection(window.bounds).height
-                } else {
-                    self.keyboardHeight = 0.0
-                }
-                self.view.setNeedsLayout()
-                self.view.layoutIfNeeded()
-            }))
-        }
-        
-        override var scrollViewBottomInset: CGFloat {
-            return max(super.scrollViewBottomInset, keyboardHeight - self.view.safeAreaInsets.bottom + 32.0)
-        }
-        
-        override var scrollViewBottomIndicatorInset: CGFloat {
-            return max(super.scrollViewBottomInset, keyboardHeight - self.view.safeAreaInsets.bottom)
         }
         
         override var step: Step {
@@ -191,9 +156,25 @@ class TestVerificationViewController: StepNavigationController {
         }
     }
     
-    class TestAdministrationDateViewController: TestStepViewController {
+    class TestAdministrationDateViewController: TestStepViewController<TestAdministrationDateViewController.CustomItem> {
         
-        var datePicker: UIDatePicker!
+        var date: Date? {
+            didSet {
+                updateTableView(animated: true, reloading: [.custom(.date)])
+                updateButtons()
+            }
+        }
+        
+        var showingDatePicker = false {
+            didSet {
+                updateTableView(animated: true)
+            }
+        }
+        
+        enum CustomItem: Hashable {
+            case date
+            case datePicker
+        }
         
         override var step: Step {
             Step(
@@ -202,40 +183,76 @@ class TestVerificationViewController: StepNavigationController {
                 },
                 title: NSLocalizedString("VERIFICATION_ADMINISTRATION_DATE_TITLE", comment: "Title"),
                 text: NSLocalizedString("VERIFICATION_ADMINISTRATION_DATE_TEXT", comment: "Text"),
-                customView: datePicker,
-                buttons: [Step.Button(title: NSLocalizedString("NEXT", comment: "Button"), isProminent: true, action: {
+                buttons: [Step.Button(title: NSLocalizedString("NEXT", comment: "Button"), isProminent: true, isEnabled: self.date != nil, action: {
+                    self.testResult.dateAdministered = self.date!
                     self.show(ReviewViewController.make(testResultID: self.testResultID), sender: nil)
                 })]
             )
         }
         
         override func viewDidLoad() {
-            datePicker = UIDatePicker()
-            datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
-            datePicker.datePickerMode = .date
-            datePicker.maximumDate = Date()
-            
+            tableView.register(UINib(nibName: "TestAdministrationDateCell", bundle: nil), forCellReuseIdentifier: "Date")
+            tableView.register(UINib(nibName: "TestAdministrationDatePickerCell", bundle: nil), forCellReuseIdentifier: "DatePicker")
             super.viewDidLoad()
         }
         
+        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, customItem: CustomItem) -> UITableViewCell {
+            switch customItem {
+            case .date:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Date", for: indexPath)
+                cell.textLabel!.text = NSLocalizedString("VERIFICATION_ADMINISTRATION_DATE_LABEL", comment: "Label")
+                if let date = date {
+                    cell.detailTextLabel!.text = DateFormatter.localizedString(from: date, dateStyle: .long, timeStyle: .none)
+                } else {
+                    cell.detailTextLabel!.text = NSLocalizedString("VERIFICATION_ADMINISTRATION_DATE_NOT_SET", comment: "Value")
+                }
+                return cell
+            case .datePicker:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "DatePicker", for: indexPath) as! TestAdministrationDatePickerCell
+                cell.datePicker.maximumDate = Date()
+                cell.datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+                return cell
+            }
+        }
+        
+        override func modifySnapshot(_ snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>) {
+            snapshot.appendItems([.custom(.date)], toSection: .main)
+            if showingDatePicker {
+                snapshot.appendItems([.custom(.datePicker)], toSection: .main)
+            }
+        }
+        
+        override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+            switch dataSource.itemIdentifier(for: indexPath) {
+            case .custom(.date):
+                return true
+            default:
+                return super.tableView(tableView, shouldHighlightRowAt: indexPath)
+            }
+        }
+        
+        override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            switch dataSource.itemIdentifier(for: indexPath) {
+            case .custom(.date):
+                tableView.deselectRow(at: indexPath, animated: true)
+                showingDatePicker.toggle()
+            default:
+                super.tableView(tableView, didSelectRowAt: indexPath)
+            }
+        }
+        
         @objc
-        func datePickerValueChanged() {
-            self.testResult.dateAdministered = datePicker.date
+        func datePickerValueChanged(_ datePicker: UIDatePicker) {
+            date = datePicker.date
         }
     }
     
-    class ReviewViewController: TestStepViewController, UITableViewDelegate {
+    class ReviewViewController: TestStepViewController<ReviewViewController.CustomItem> {
         
-        enum Section: Hashable {
-            case main
-        }
-        enum Item: Hashable {
+        enum CustomItem: Hashable {
             case diagnosis
             case administrationDate
         }
-        
-        var dataSource: UITableViewDiffableDataSource<Section, Item>!
-        var tableView: UITableView!
         
         override var step: Step {
             Step(
@@ -244,13 +261,9 @@ class TestVerificationViewController: StepNavigationController {
                 },
                 title: NSLocalizedString("VERIFICATION_REVIEW_TITLE", comment: "Title"),
                 text: NSLocalizedString("VERIFICATION_REVIEW_TEXT", comment: "Text"),
-                customView: tableView,
                 isModal: false,
                 buttons: [Step.Button(title: NSLocalizedString("TEST_RESULT_SHARE", comment: "Button"), isProminent: true, action: {
-                    // In this reference implementation, we don't set a transmissionRiskLevel for any of the diagnosis keys. However, it is at this
-                    // point that you could use information accumulated in the TestResult instance to determine a transmissionRiskLevel for the
-                    // diagnosis keys, and different levels may be specified for keys from different days.
-                    ExposureManager.shared.getAndPostDiagnosisKeys { error in
+                    ExposureManager.shared.getAndPostDiagnosisKeys(testResult: self.testResult) { error in
                         if let error = error as? ENError, error.code == .notAuthorized {
                             self.saveAndFinish()
                         } else if let error = error {
@@ -265,56 +278,26 @@ class TestVerificationViewController: StepNavigationController {
             )
         }
         
-        class Cell: UITableViewCell {
-            override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-                super.init(style: .value1, reuseIdentifier: reuseIdentifier)
-                textLabel!.font = .preferredFont(forTextStyle: .body)
-                textLabel!.adjustsFontForContentSizeCategory = true
-                detailTextLabel!.font = .preferredFont(forTextStyle: .body)
-                detailTextLabel!.adjustsFontForContentSizeCategory = true
-            }
-            
-            required init?(coder: NSCoder) {
-                fatalError("init(coder:) has not been implemented")
-            }
-        }
-        
         override func viewDidLoad() {
-            tableView = UITableView()
-            tableView.register(Cell.self, forCellReuseIdentifier: "Cell")
-            tableView.delegate = self
-            tableView.alwaysBounceVertical = false
-            
-            dataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView, cellProvider: { tableView, indexPath, row in
-                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-                switch row {
-                case .diagnosis:
-                    cell.textLabel!.text = NSLocalizedString("TEST_RESULT_DIAGNOSIS", comment: "Label")
-                    cell.detailTextLabel!.text = NSLocalizedString("TEST_RESULT_DIAGNOSIS_POSITIVE", comment: "Value")
-                case .administrationDate:
-                    cell.textLabel!.text = NSLocalizedString("TEST_RESULT_ADMINISTRATION_DATE", comment: "Label")
-                    cell.detailTextLabel!.text = DateFormatter.localizedString(from: self.testResult.dateAdministered,
-                                                                               dateStyle: .long, timeStyle: .none)
-                }
-                return cell
-            })
-            var snapshot = dataSource.snapshot()
-            snapshot.appendSections([.main])
-            snapshot.appendItems([.diagnosis, .administrationDate], toSection: .main)
-            dataSource.apply(snapshot)
-            
+            tableView.register(UINib(nibName: "TestReviewCell", bundle: nil), forCellReuseIdentifier: "Cell")
             super.viewDidLoad()
-            
-            tableView.reloadData()
-            NSLayoutConstraint.activate([
-                tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-                tableView.heightAnchor.constraint(equalTo: tableView.cellForRow(at: IndexPath(row: 0, section: 0))!.heightAnchor,
-                                                  multiplier: 2.0)
-            ])
         }
         
-        func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-            return false
+        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, customItem: CustomItem) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            switch customItem {
+            case .diagnosis:
+                cell.textLabel!.text = NSLocalizedString("TEST_RESULT_DIAGNOSIS", comment: "Label")
+                cell.detailTextLabel!.text = NSLocalizedString("TEST_RESULT_DIAGNOSIS_POSITIVE", comment: "Value")
+            case .administrationDate:
+                cell.textLabel!.text = NSLocalizedString("TEST_RESULT_ADMINISTRATION_DATE", comment: "Label")
+                cell.detailTextLabel!.text = DateFormatter.localizedString(from: self.testResult.dateAdministered, dateStyle: .long, timeStyle: .none)
+            }
+            return cell
+        }
+        
+        override func modifySnapshot(_ snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>) {
+            snapshot.appendItems([.custom(.diagnosis), .custom(.administrationDate)], toSection: .main)
         }
         
         func saveAndFinish() {
@@ -323,7 +306,7 @@ class TestVerificationViewController: StepNavigationController {
         }
     }
     
-    static func cancel(from viewController: TestStepViewController) {
+    static func cancel<CustomItem: Hashable>(from viewController: TestStepViewController<CustomItem>) {
         let testResult = viewController.testResult
         if !testResult.isAdded {
             LocalStore.shared.testResults.removeValue(forKey: testResult.id)
@@ -331,7 +314,7 @@ class TestVerificationViewController: StepNavigationController {
         viewController.dismiss(animated: true, completion: nil)
     }
     
-    class FinishedViewController: TestStepViewController {
+    class FinishedViewController: TestStepViewController<Never> {
         override var step: Step {
             return Step(
                 hidesNavigationBackButton: true,
@@ -347,4 +330,8 @@ class TestVerificationViewController: StepNavigationController {
             )
         }
     }
+}
+
+class TestAdministrationDatePickerCell: StepOptionalSeparatorCell {
+    @IBOutlet var datePicker: UIDatePicker!
 }

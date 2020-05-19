@@ -60,9 +60,6 @@ class ExposureNotificationsInfoViewController: StepNavigationController {
         override func viewDidLoad() {
             requirementsView = RequirementView(text: NSLocalizedString("EXPOSURE_INFO_REQUIREMENT_TEXT", comment: "Requirement text"))
             super.viewDidLoad()
-            NSLayoutConstraint.activate([
-                requirementsView.widthAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.widthAnchor)
-            ])
         }
     }
 }

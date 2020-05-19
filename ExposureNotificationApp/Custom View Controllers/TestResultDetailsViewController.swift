@@ -19,7 +19,8 @@ class TestResultDetailsViewController: UITableViewController {
         super.init(coder: coder)
         
         let barAppearance = UINavigationBarAppearance()
-        barAppearance.largeTitleTextAttributes = [.font: UIFont.preferredFont(forTextStyle: .title2)]
+        let titleFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2).withSymbolicTraits(.traitBold)!
+        barAppearance.largeTitleTextAttributes = [.font: UIFont(descriptor: titleFontDescriptor, size: 0.0)]
         navigationItem.standardAppearance = barAppearance
         
         observers.append(LocalStore.shared.$testResults.addObserver { [unowned self] in

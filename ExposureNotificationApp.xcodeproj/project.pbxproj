@@ -22,9 +22,13 @@
 		46B0A02C24558B3A001CB4E5 /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B0A02B24558B3A001CB4E5 /* StepViewController.swift */; };
 		46B0A02E24558D5C001CB4E5 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B0A02D24558D5C001CB4E5 /* OnboardingViewController.swift */; };
 		46B0C672245EA51800D15BE1 /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B0C671245EA51800D15BE1 /* TableHeaderView.swift */; };
+		46B39A13246BD5EA003D39D9 /* ExposureDetailsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B39A12246BD5EA003D39D9 /* ExposureDetailsCell.xib */; };
+		46B39A15246BD6BF003D39D9 /* ExposureNextStepsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B39A14246BD6BF003D39D9 /* ExposureNextStepsCell.xib */; };
+		46B39A17246BDEB6003D39D9 /* ExposureFootnoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B39A16246BDEB6003D39D9 /* ExposureFootnoteCell.xib */; };
+		46B39A19246BE1A7003D39D9 /* TestAdministrationDateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B39A18246BE1A7003D39D9 /* TestAdministrationDateCell.xib */; };
+		46B39A1B246BE5FE003D39D9 /* TestAdministrationDatePickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B39A1A246BE5FE003D39D9 /* TestAdministrationDatePickerCell.xib */; };
+		46B39A1D246C08AE003D39D9 /* TestReviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B39A1C246C08AE003D39D9 /* TestReviewCell.xib */; };
 		46C7415C245A636500E5C53A /* ExposureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C7415B245A636500E5C53A /* ExposureDetailsViewController.swift */; };
-		46C7415F245A64B600E5C53A /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C7415E245A64B600E5C53A /* SeparatorView.swift */; };
-		46C74162245A65C100E5C53A /* ExposureDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C74161245A65C100E5C53A /* ExposureDetailsView.xib */; };
 		46C74164245A6BEB00E5C53A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46C74163245A6BEB00E5C53A /* Main.storyboard */; };
 		46C74166245A8DAC00E5C53A /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C74165245A8DAC00E5C53A /* EntryView.swift */; };
 		46D167BA2446AA3400120FCB /* TestVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D167B92446AA3400120FCB /* TestVerificationViewController.swift */; };
@@ -57,10 +61,14 @@
 		46B0A02B24558B3A001CB4E5 /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		46B0A02D24558D5C001CB4E5 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		46B0C671245EA51800D15BE1 /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
+		46B39A12246BD5EA003D39D9 /* ExposureDetailsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExposureDetailsCell.xib; sourceTree = "<group>"; };
+		46B39A14246BD6BF003D39D9 /* ExposureNextStepsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExposureNextStepsCell.xib; sourceTree = "<group>"; };
+		46B39A16246BDEB6003D39D9 /* ExposureFootnoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExposureFootnoteCell.xib; sourceTree = "<group>"; };
+		46B39A18246BE1A7003D39D9 /* TestAdministrationDateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestAdministrationDateCell.xib; sourceTree = "<group>"; };
+		46B39A1A246BE5FE003D39D9 /* TestAdministrationDatePickerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestAdministrationDatePickerCell.xib; sourceTree = "<group>"; };
+		46B39A1C246C08AE003D39D9 /* TestReviewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestReviewCell.xib; sourceTree = "<group>"; };
 		46B451C42462A79B009733F4 /* DeveloperDiagnosisKeyFileProtobuf.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; path = DeveloperDiagnosisKeyFileProtobuf.proto; sourceTree = "<group>"; };
 		46C7415B245A636500E5C53A /* ExposureDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureDetailsViewController.swift; sourceTree = "<group>"; };
-		46C7415E245A64B600E5C53A /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
-		46C74161245A65C100E5C53A /* ExposureDetailsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExposureDetailsView.xib; sourceTree = "<group>"; };
 		46C74163245A6BEB00E5C53A /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		46C74165245A8DAC00E5C53A /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
 		46D02A552446401A002EBAF0 /* ExposureNotificationApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ExposureNotificationApp.entitlements; sourceTree = "<group>"; };
@@ -130,7 +138,12 @@
 				46E5D01124502594000347EB /* Custom Views */,
 				46C7415D245A645D00E5C53A /* Developer */,
 				46C74163245A6BEB00E5C53A /* Main.storyboard */,
-				46C74161245A65C100E5C53A /* ExposureDetailsView.xib */,
+				46B39A12246BD5EA003D39D9 /* ExposureDetailsCell.xib */,
+				46B39A14246BD6BF003D39D9 /* ExposureNextStepsCell.xib */,
+				46B39A16246BDEB6003D39D9 /* ExposureFootnoteCell.xib */,
+				46B39A18246BE1A7003D39D9 /* TestAdministrationDateCell.xib */,
+				46B39A1A246BE5FE003D39D9 /* TestAdministrationDatePickerCell.xib */,
+				46B39A1C246C08AE003D39D9 /* TestReviewCell.xib */,
 				465310C32444F94500B6185D /* Assets.xcassets */,
 				464851EC245B80D6008BF52F /* Localizable.strings */,
 				465310C52444F94500B6185D /* LaunchScreen.storyboard */,
@@ -175,7 +188,6 @@
 				46E5D00F2450113A000347EB /* VerticalScrollView.swift */,
 				46E5D00B24500AC6000347EB /* Button.swift */,
 				46E515B32455000400A8B68E /* TintLabel.swift */,
-				46C7415E245A64B600E5C53A /* SeparatorView.swift */,
 				46C74165245A8DAC00E5C53A /* EntryView.swift */,
 				46824FA4245CDC3D00E780DB /* RequirementView.swift */,
 			);
@@ -273,11 +285,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46B39A1D246C08AE003D39D9 /* TestReviewCell.xib in Resources */,
+				46B39A13246BD5EA003D39D9 /* ExposureDetailsCell.xib in Resources */,
 				465310C72444F94500B6185D /* LaunchScreen.storyboard in Resources */,
+				46B39A19246BE1A7003D39D9 /* TestAdministrationDateCell.xib in Resources */,
+				46B39A1B246BE5FE003D39D9 /* TestAdministrationDatePickerCell.xib in Resources */,
 				464851EE245B80D6008BF52F /* Localizable.strings in Resources */,
+				46B39A15246BD6BF003D39D9 /* ExposureNextStepsCell.xib in Resources */,
 				46C74164245A6BEB00E5C53A /* Main.storyboard in Resources */,
+				46B39A17246BDEB6003D39D9 /* ExposureFootnoteCell.xib in Resources */,
 				465310C42444F94500B6185D /* Assets.xcassets in Resources */,
-				46C74162245A65C100E5C53A /* ExposureDetailsView.xib in Resources */,
 				5F91F0A82457E82500F8F0BA /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,7 +308,6 @@
 			files = (
 				46B0A02E24558D5C001CB4E5 /* OnboardingViewController.swift in Sources */,
 				46E5D01524502C59000347EB /* ExposureManager.swift in Sources */,
-				46C7415F245A64B600E5C53A /* SeparatorView.swift in Sources */,
 				46E515B62455047600A8B68E /* ExposuresViewController.swift in Sources */,
 				46E5D00C24500AC7000347EB /* Button.swift in Sources */,
 				46337EA6245AB4260066414A /* TestResultDetailsViewController.swift in Sources */,
@@ -463,14 +479,14 @@
 				CODE_SIGN_ENTITLEMENTS = ExposureNotificationApp/ExposureNotificationApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ExposureNotificationApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.ExposureNotificationSampleApp${SAMPLE_CODE_DISAMBIGUATOR}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -490,14 +506,14 @@
 				CODE_SIGN_ENTITLEMENTS = ExposureNotificationApp/ExposureNotificationApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ExposureNotificationApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.ExposureNotificationSampleApp${SAMPLE_CODE_DISAMBIGUATOR}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

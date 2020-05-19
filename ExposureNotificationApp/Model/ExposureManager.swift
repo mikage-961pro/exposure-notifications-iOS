@@ -7,6 +7,7 @@ A class that manages a singleton ENManager object.
 
 import Foundation
 import ExposureNotification
+import UserNotifications
 
 class ExposureManager {
     
@@ -52,9 +53,7 @@ class ExposureManager {
         
         func finish(_ result: Result<([Exposure], Int), Error>) {
             
-            for localURL in localURLs {
-                try? Server.shared.deleteDiagnosisKeyFile(at: localURL)
-            }
+            try? Server.shared.deleteDiagnosisKeyFile(at: localURLs)
             
             let success: Bool
             if progress.isCancelled {
@@ -83,7 +82,7 @@ class ExposureManager {
         Server.shared.getDiagnosisKeyFileURLs(startingAt: nextDiagnosisKeyFileIndex) { result in
             
             let dispatchGroup = DispatchGroup()
-            var localURLResults = [Result<URL, Error>]()
+            var localURLResults = [Result<[URL], Error>]()
             
             switch result {
             case let .success(remoteURLs):
@@ -101,8 +100,8 @@ class ExposureManager {
             dispatchGroup.notify(queue: .main) {
                 for result in localURLResults {
                     switch result {
-                    case let .success(localURL):
-                        localURLs.append(localURL)
+                    case let .success(urls):
+                        localURLs.append(contentsOf: urls)
                     case let .failure(error):
                         finish(.failure(error))
                         return
@@ -142,11 +141,13 @@ class ExposureManager {
         return progress
     }
     
-    func getAndPostDiagnosisKeys(completion: @escaping (Error?) -> Void) {
+    func getAndPostDiagnosisKeys(testResult: TestResult, completion: @escaping (Error?) -> Void) {
         manager.getDiagnosisKeys { temporaryExposureKeys, error in
             if let error = error {
                 completion(error)
             } else {
+                // In this sample app, transmissionRiskLevel isn't set for any of the diagnosis keys. However, it is at this point that an app could
+                // use information accumulated in testResult to determine a transmissionRiskLevel for each diagnosis key.
                 Server.shared.postDiagnosisKeys(temporaryExposureKeys!) { error in
                     completion(error)
                 }
@@ -164,6 +165,26 @@ class ExposureManager {
                     completion(error)
                 }
             }
+        }
+    }
+    
+    func showBluetoothOffUserNotificationIfNeeded() {
+        let identifier = "bluetooth-off"
+        if ENManager.authorizationStatus == .authorized && manager.exposureNotificationStatus == .bluetoothOff {
+            let content = UNMutableNotificationContent()
+            content.title = NSLocalizedString("USER_NOTIFICATION_BLUETOOTH_OFF_TITLE", comment: "User notification title")
+            content.body = NSLocalizedString("USER_NOTIFICATION_BLUETOOTH_OFF_BODY", comment: "User notification")
+            content.sound = .default
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+            UNUserNotificationCenter.current().add(request) { error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("Error showing error user notification: \(error)")
+                    }
+                }
+            }
+        } else {
+            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
         }
     }
 }

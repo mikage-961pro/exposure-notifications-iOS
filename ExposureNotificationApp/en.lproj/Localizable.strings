@@ -34,6 +34,12 @@ All strings for the project, separated for localization.
 /* Text */
 "RECOMMEND_EXPOSURE_TEXT" = "{Actual copy to be provided by Public Health Authority}";
 
+/* Onboarding title */
+"RECOMMEND_PUSH_TITLE" = "Push Notifications Are Strongly Recommended";
+
+/* Onboarding text */
+"RECOMMEND_PUSH_TEXT" = "{Actual copy to be provided by Public Health Authority}";
+
 /* Title */
 "NOTIFYING_OTHERS_TITLE" = "It's Important To Your Community To Share A Positive Diagnosis";
 
@@ -128,6 +134,26 @@ You can manage Exposure Notifications in %@.
 
 You were near someone %@ who has shared their positive diagnosis of COVID-19.";
 
+/* Header */
+"EXPOSURE_DETAILS_HEADER" = "Details";
+
+/* Text */
+"EXPOSURE_DETAILS_DIAGNOSIS_VERIFICATION" = "This person’s diagnosis was verified";
+
+/* Header */
+"EXPOSURE_NEXT_STEPS_HEADER" = "Next Steps";
+
+/* Text */
+"EXPOSURE_NEXT_STEPS_TEXT" = "{Actual copy to be provided by Public Health Authority}
+
+
+
+";
+
+/* Footnote */
+"EXPOSURE_FOOTNOTE" = "This report has been saved to this app and you can access it at any time in the future.";
+
+
 /* Text */
 "EXPOSURE_DETAILS_DATE_TEXT" = "You were near this person on %@";
 
@@ -217,6 +243,12 @@ This example flow assumes a test for the entirety of the flow, but could be conf
 This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}
 
 The test date helps the app know when you may have been infectious and notify the right people of possible exposure.";
+
+/* Label */
+"VERIFICATION_ADMINISTRATION_DATE_LABEL" = "Date";
+
+/* Value */
+"VERIFICATION_ADMINISTRATION_DATE_NOT_SET" = "Tap to enter date";
 
 /* Title */
 "VERIFICATION_REVIEW_TITLE" = "Review your answers";
@@ -319,3 +351,9 @@ This example flow assumes a test for the entirety of the flow, but could be conf
 
 /* User notification */
 "USER_NOTIFICATION_EXPLANATION" = "{Actual copy to be provided by Public Health Authority}";
+
+/* User notification title */
+"USER_NOTIFICATION_BLUETOOTH_OFF_TITLE" = "Bluetooth Off";
+
+/* User notification */
+"USER_NOTIFICATION_BLUETOOTH_OFF_BODY" = "Turn on Bluetooth to continue using COVID-19 Exposure Logging and Notifications.";

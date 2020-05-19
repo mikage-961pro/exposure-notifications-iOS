@@ -7,6 +7,7 @@ A class representing a local server that vends exposure data.
 
 import Foundation
 import ExposureNotification
+import CommonCrypto
 
 struct CodableDiagnosisKey: Codable, Equatable {
     let keyData: Data
@@ -17,14 +18,11 @@ struct CodableDiagnosisKey: Codable, Equatable {
 
 struct CodableExposureConfiguration: Codable {
     let minimumRiskScore: ENRiskScore
+    let attenuationDurationThresholds: [Int]
     let attenuationLevelValues: [ENRiskLevelValue]
-    let attenuationWeight: Double
     let daysSinceLastExposureLevelValues: [ENRiskLevelValue]
-    let daysSinceLastExposureWeight: Double
     let durationLevelValues: [ENRiskLevelValue]
-    let durationWeight: Double
     let transmissionRiskLevelValues: [ENRiskLevelValue]
-    let transmissionRiskWeight: Double
 }
 
 // Replace this class with your own class that communicates with your server.
@@ -57,53 +55,110 @@ class Server {
         
         // In a real implementation, these URLs would be retrieved from a server with URLSession
         // This sample only returns one placeholder URL, because the diagnosis key file is generated in each call to downloadDiagnosisKeyFile
-        let remoteURLs = [URL(string: "/url/to/file/")!]
+        let remoteURLs = [URL(string: "/url/to/export\(index)")!]
         
         completion(.success(Array(remoteURLs[min(index, remoteURLs.count)...])))
     }
     
+    // In a real implementation, this would be kept secret on your server
+    // This is a sample private key - you will need to generate your own public-private key pair and share the public key with Apple
+    // NOTE: The backslash on the end of the first line is not part of the key
+    static let privateKeyECData = Data(base64Encoded: """
+    MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgKJNe9P8hzcbVkoOYM4hJFkLERNKvtC8B40Y/BNpfxMeh\
+    RANCAASfuKEs4Z9gHY23AtuMv1PvDcp4Uiz6lTbA/p77if0yO2nXBL7th8TUbdHOsUridfBZ09JqNQYKtaU9BalkyodM
+    """)!
+    
     // The URL passed to the completion is the local URL of the downloaded diagnosis key file
-    func downloadDiagnosisKeyFile(at remoteURL: URL, completion: (Result<URL, Error>) -> Void) {
-        
-        // In a real implementation, the file at remoteURL would be downloaded from a server
-        // This sample ignores the remote URL and just generates and saves a file based on the locally stored diagnosis keys
-        let file = File.with { file in
-            file.key = diagnosisKeys.map { diagnosisKey in
-                Key.with { key in
-                    key.keyData = diagnosisKey.keyData
-                    key.rollingPeriod = diagnosisKey.rollingPeriod
-                    key.rollingStartNumber = diagnosisKey.rollingStartNumber
-                    key.transmissionRiskLevel = Int32(diagnosisKey.transmissionRiskLevel)
+    func downloadDiagnosisKeyFile(at remoteURL: URL, completion: (Result<[URL], Error>) -> Void) {
+        do {
+            let attributes = [
+                kSecAttrKeyType: kSecAttrKeyTypeEC,
+                kSecAttrKeyClass: kSecAttrKeyClassPrivate,
+                kSecAttrKeySizeInBits: 256
+            ] as CFDictionary
+            
+            var cfError: Unmanaged<CFError>? = nil
+            
+            let privateKeyData = Server.privateKeyECData.suffix(65) + Server.privateKeyECData.subdata(in: 36..<68)
+            guard let secKey = SecKeyCreateWithData(privateKeyData as CFData, attributes, &cfError) else {
+                throw cfError!.takeRetainedValue()
+            }
+            
+            let signatureInfo = SignatureInfo.with { signatureInfo in
+                signatureInfo.appBundleID = Bundle.main.bundleIdentifier!
+                signatureInfo.verificationKeyVersion = "v1"
+                signatureInfo.verificationKeyID = "310"
+                signatureInfo.signatureAlgorithm = "SHA256withECDSA"
+            }
+            
+            // In a real implementation, the file at remoteURL would be downloaded from a server
+            // This sample generates and saves a binary and signature pair of files based on the locally stored diagnosis keys
+            let export = TemporaryExposureKeyExport.with { export in
+                export.batchNum = 1
+                export.batchSize = 1
+                export.region = "310"
+                export.signatureInfos = [signatureInfo]
+                export.keys = diagnosisKeys.shuffled().map { diagnosisKey in
+                    TemporaryExposureKey.with { temporaryExposureKey in
+                        temporaryExposureKey.keyData = diagnosisKey.keyData
+                        temporaryExposureKey.transmissionRiskLevel = Int32(diagnosisKey.transmissionRiskLevel)
+                        temporaryExposureKey.rollingStartIntervalNumber = Int32(diagnosisKey.rollingStartNumber)
+                        temporaryExposureKey.rollingPeriod = Int32(diagnosisKey.rollingPeriod)
+                    }
                 }
             }
-        }
-        
-        do {
-            let data = try file.serializedData()
-            let localURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("diagnosisKeys")
-            try data.write(to: localURL)
-            completion(.success(localURL))
+            
+            let exportData = "EK Export v1    ".data(using: .utf8)! + (try export.serializedData())
+            
+            var exportHash = Data(count: Int(CC_SHA256_DIGEST_LENGTH))
+            _ = exportData.withUnsafeBytes { exportDataBuffer in
+                exportHash.withUnsafeMutableBytes { exportHashBuffer in
+                    CC_SHA256(exportDataBuffer.baseAddress, CC_LONG(exportDataBuffer.count), exportHashBuffer.bindMemory(to: UInt8.self).baseAddress)
+                }
+            }
+            
+            guard let signedHash = SecKeyCreateSignature(secKey, .ecdsaSignatureDigestX962SHA256, exportHash as CFData, &cfError) as Data? else {
+                throw cfError!.takeRetainedValue()
+            }
+            
+            let tekSignatureList = TEKSignatureList.with { tekSignatureList in
+                tekSignatureList.signatures = [TEKSignature.with { tekSignature in
+                    tekSignature.signatureInfo = signatureInfo
+                    tekSignature.signature = signedHash
+                    tekSignature.batchNum = 1
+                    tekSignature.batchSize = 1
+                }]
+            }
+            
+            let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+            
+            let localBinURL = cachesDirectory.appendingPathComponent(remoteURL.lastPathComponent + ".bin")
+            try exportData.write(to: localBinURL)
+            
+            let localSigURL = cachesDirectory.appendingPathComponent(remoteURL.lastPathComponent + ".sig")
+            try tekSignatureList.serializedData().write(to: localSigURL)
+            
+            completion(.success([localBinURL, localSigURL]))
         } catch {
             completion(.failure(error))
         }
     }
     
-    func deleteDiagnosisKeyFile(at localURL: URL) throws {
-        try FileManager.default.removeItem(at: localURL)
+    func deleteDiagnosisKeyFile(at localURLs: [URL]) throws {
+        for localURL in localURLs {
+            try FileManager.default.removeItem(at: localURL)
+        }
     }
     
     func getExposureConfiguration(completion: (Result<ENExposureConfiguration, Error>) -> Void) {
         
         let dataFromServer = """
         {"minimumRiskScore":0,
+        "attenuationDurationThresholds":[50, 70],
         "attenuationLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-        "attenuationWeight":50,
         "daysSinceLastExposureLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-        "daysSinceLastExposureWeight":50,
         "durationLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-        "durationWeight":50,
-        "transmissionRiskLevelValues":[1, 2, 3, 4, 5, 6, 7, 8],
-        "transmissionRiskWeight":50}
+        "transmissionRiskLevelValues":[1, 2, 3, 4, 5, 6, 7, 8]}
         """.data(using: .utf8)!
         
         do {
@@ -111,13 +166,10 @@ class Server {
             let exposureConfiguration = ENExposureConfiguration()
             exposureConfiguration.minimumRiskScore = codableExposureConfiguration.minimumRiskScore
             exposureConfiguration.attenuationLevelValues = codableExposureConfiguration.attenuationLevelValues as [NSNumber]
-            exposureConfiguration.attenuationWeight = codableExposureConfiguration.attenuationWeight
             exposureConfiguration.daysSinceLastExposureLevelValues = codableExposureConfiguration.daysSinceLastExposureLevelValues as [NSNumber]
-            exposureConfiguration.daysSinceLastExposureWeight = codableExposureConfiguration.daysSinceLastExposureWeight
             exposureConfiguration.durationLevelValues = codableExposureConfiguration.durationLevelValues as [NSNumber]
-            exposureConfiguration.durationWeight = codableExposureConfiguration.durationWeight
             exposureConfiguration.transmissionRiskLevelValues = codableExposureConfiguration.transmissionRiskLevelValues as [NSNumber]
-            exposureConfiguration.transmissionRiskWeight = codableExposureConfiguration.transmissionRiskWeight
+            exposureConfiguration.metadata = ["attenuationDurationThresholds": codableExposureConfiguration.attenuationDurationThresholds]
             completion(.success(exposureConfiguration))
         } catch {
             completion(.failure(error))

@@ -15,7 +15,7 @@ class OnboardingViewController: StepNavigationController {
         pushViewController(WelcomeViewController.make(), animated: false)
     }
     
-    init?(rootViewController: StepViewController, coder aDecoder: NSCoder) {
+    init?<CustomItem: Hashable>(rootViewController: CustomStepViewController<CustomItem>, coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         pushViewController(rootViewController, animated: false)
     }
@@ -46,7 +46,7 @@ class OnboardingViewController: StepNavigationController {
                         enableExposureNotifications(from: self)
                     }),
                     Step.Button(title: NSLocalizedString("DONT_ENABLE", comment: "Button"), action: {
-                        self.show(ExposureNotificationsAreStronglyRecommendedViewController.make(), sender: nil)
+                        self.show(RecommendExposureNotificationsViewController.make(), sender: nil)
                     })
                 ]
             )
@@ -55,13 +55,10 @@ class OnboardingViewController: StepNavigationController {
         override func viewDidLoad() {
             requirementsView = RequirementView(text: NSLocalizedString("ENABLE_EXPOSURE_REQUIREMENT_TEXT", comment: "Requirement text"))
             super.viewDidLoad()
-            NSLayoutConstraint.activate([
-                requirementsView.widthAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.widthAnchor)
-            ])
         }
     }
     
-    class ExposureNotificationsAreStronglyRecommendedViewController: StepViewController {
+    class RecommendExposureNotificationsViewController: StepViewController {
         override var step: Step {
             Step(
                 hidesNavigationBackButton: true,
@@ -84,17 +81,17 @@ class OnboardingViewController: StepNavigationController {
         ExposureManager.shared.manager.setExposureNotificationEnabled(true) { error in
             NotificationCenter.default.post(name: ExposureManager.authorizationStatusChangeNotification, object: nil)
             if let error = error as? ENError, error.code == .notAuthorized {
-                viewController.show(ExposureNotificationsAreStronglyRecommendedSettingsViewController.make(), sender: nil)
+                viewController.show(RecommendExposureNotificationsSettingsViewController.make(), sender: nil)
             } else if let error = error {
                 showError(error, from: viewController)
             } else {
                 (UIApplication.shared.delegate as! AppDelegate).scheduleBackgroundTaskIfNeeded()
-                viewController.show(NotifyingOthersViewController.make(independent: false), sender: nil)
+                enablePushNotifications(from: viewController)
             }
         }
     }
     
-    class ExposureNotificationsAreStronglyRecommendedSettingsViewController: StepViewController {
+    class RecommendExposureNotificationsSettingsViewController: StepViewController {
         override var step: Step {
             Step(
                 hidesNavigationBackButton: true,
@@ -112,7 +109,53 @@ class OnboardingViewController: StepNavigationController {
         }
     }
     
-    class NotifyingOthersViewController: ValueStepViewController<Bool> {
+    static func enablePushNotifications(from viewController: UIViewController) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { granted, error in
+            DispatchQueue.main.async {
+                if granted {
+                    viewController.show(NotifyingOthersViewController.make(independent: false), sender: nil)
+                } else {
+                    viewController.show(RecommendPushNotificationsViewController.make(), sender: nil)
+                }
+            }
+        }
+    }
+    
+    class RecommendPushNotificationsViewController: StepViewController {
+        override var step: Step {
+            Step(
+                hidesNavigationBackButton: true,
+                title: NSLocalizedString("RECOMMEND_PUSH_TITLE", comment: "Title"),
+                text: NSLocalizedString("RECOMMEND_PUSH_TEXT", comment: "Text"),
+                buttons: [
+                    Step.Button(title: NSLocalizedString("GO_TO_SETTINGS", comment: "Button"), isProminent: true, action: {
+                        openSettings(from: self)
+                    }),
+                    Step.Button(title: NSLocalizedString("NOT_NOW", comment: "Button"), action: {
+                        self.show(NotifyingOthersViewController.make(independent: false), sender: nil)
+                    })
+                ]
+            )
+        }
+        
+        override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
+            let notification = UIScene.didActivateNotification
+            let windowScene = view.window!.windowScene!
+            observers.append(NotificationCenter.default.addObserver(forName: notification, object: windowScene, queue: nil) {
+                [unowned self] notification in
+                UNUserNotificationCenter.current().getNotificationSettings { settings in
+                    if settings.authorizationStatus == .authorized {
+                        DispatchQueue.main.async {
+                            self.show(NotifyingOthersViewController.make(independent: false), sender: nil)
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    class NotifyingOthersViewController: ValueStepViewController<Bool, Never> {
         
         var independent: Bool { value } // Whether this view controller is being shown outside the normal onboarding flow
         

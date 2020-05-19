@@ -8,16 +8,22 @@ The application delegate.
 import UIKit
 import ExposureNotification
 import BackgroundTasks
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     static let backgroundTaskIdentifier = Bundle.main.bundleIdentifier! + ".exposure-notification"
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
- 
+        
+        UNUserNotificationCenter.current().delegate = self
+        
         BGTaskScheduler.shared.register(forTaskWithIdentifier: AppDelegate.backgroundTaskIdentifier, using: .main) { task in
+            
+            // Notify the user if bluetooth is off
+            ExposureManager.shared.showBluetoothOffUserNotificationIfNeeded()
             
             // Perform the exposure detection
             let progress = ExposureManager.shared.detectExposures { success in
@@ -38,6 +44,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.actionIdentifier == UNNotificationDefaultActionIdentifier,
+            let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let tabBarController = scene.windows.first?.rootViewController as? UITabBarController {
+            tabBarController.selectedIndex = 0
+        }
+    }
+    
     func scheduleBackgroundTaskIfNeeded() {
         guard ENManager.authorizationStatus == .authorized else { return }
         let taskRequest = BGProcessingTaskRequest(identifier: AppDelegate.backgroundTaskIdentifier)

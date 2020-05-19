@@ -45,7 +45,9 @@ class EntryView: UIView, UITextFieldDelegate {
         
         let label = UILabel()
         label.text = NSLocalizedString("VERIFICATION_IDENTIFIER_ENTRY_LABEL", comment: "Label")
-        label.font = .preferredFont(forTextStyle: .body)
+        label.font = .preferredFont(forTextStyle: .callout)
+        label.numberOfLines = 0
+        label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
         
         for _ in 0..<numberOfDigits {

@@ -36,6 +36,11 @@ class ExposuresViewController: UITableViewController {
         observers.append(LocalStore.shared.$exposureDetectionErrorLocalizedDescription.addObserver { [unowned self] in
             self.reloadStatusSection()
         })
+        
+        observers.append(NotificationCenter.default.addObserver(forName: UIApplication.significantTimeChangeNotification, object: nil, queue: nil) {
+            [unowned self] _ in
+            self.reloadStatusSection()
+        })
     }
     
     deinit {

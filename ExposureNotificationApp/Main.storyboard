@@ -639,56 +639,79 @@
             </objects>
             <point key="canvasLocation" x="214" y="-629"/>
         </scene>
-        <!--Step View Controller-->
+        <!--Custom Step View Controller-->
         <scene sceneID="QYt-9X-1Fo">
             <objects>
-                <viewController storyboardIdentifier="Step" id="jov-DV-93K" customClass="StepViewController" customModule="ExposureNotificationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Step" id="jov-DV-93K" customClass="CustomStepViewController" customModule="ExposureNotificationApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1dY-b6-LBY">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="NfL-tt-MMG" customClass="VerticalScollView" customModule="ExposureNotificationApp" customModuleProvider="target">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LV9-es-7mG">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="MSh-GC-ahs">
-                                        <rect key="frame" x="0.0" y="0.0" width="4023" height="99"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z5m-fH-M2D">
-                                                <rect key="frame" x="20" y="0.0" width="3983" height="41"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aXj-zM-OXi">
-                                                <rect key="frame" x="20" y="61" width="3983" height="38"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
-                                                <connections>
-                                                    <outlet property="delegate" destination="jov-DV-93K" id="20b-a1-9iI"/>
-                                                </connections>
-                                            </textView>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="trailingMargin" secondItem="z5m-fH-M2D" secondAttribute="trailing" id="IqU-Rf-geS"/>
-                                            <constraint firstItem="aXj-zM-OXi" firstAttribute="leading" secondItem="MSh-GC-ahs" secondAttribute="leadingMargin" id="O8o-QL-zwc"/>
-                                            <constraint firstItem="z5m-fH-M2D" firstAttribute="leading" secondItem="MSh-GC-ahs" secondAttribute="leadingMargin" id="PgH-J9-B7o"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="aXj-zM-OXi" secondAttribute="trailing" id="vIn-fT-oXg"/>
-                                        </constraints>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="MSh-GC-ahs" firstAttribute="leading" secondItem="NfL-tt-MMG" secondAttribute="leading" id="Gpq-9o-DVr"/>
-                                    <constraint firstItem="1CQ-aF-V8W" firstAttribute="bottom" secondItem="MSh-GC-ahs" secondAttribute="bottom" id="Rgt-9M-ndo"/>
-                                    <constraint firstAttribute="trailing" secondItem="MSh-GC-ahs" secondAttribute="trailing" id="pzj-B4-C3f"/>
-                                    <constraint firstItem="MSh-GC-ahs" firstAttribute="top" secondItem="1CQ-aF-V8W" secondAttribute="top" id="vGl-NE-cPc"/>
-                                </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="1CQ-aF-V8W"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="CVl-sg-11K"/>
-                            </scrollView>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Title" id="MoS-8x-cBh" customClass="StepTitleCell" customModule="ExposureNotificationApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MoS-8x-cBh" id="yRc-Ge-LLu">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtU-NR-pG3">
+                                                    <rect key="frame" x="20" y="0.0" width="374" height="34"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="EtU-NR-pG3" firstAttribute="leading" secondItem="yRc-Ge-LLu" secondAttribute="leadingMargin" id="0h4-Dv-FjJ"/>
+                                                <constraint firstAttribute="bottom" secondItem="EtU-NR-pG3" secondAttribute="bottom" constant="16" id="E7Y-LG-GtQ"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="EtU-NR-pG3" secondAttribute="trailing" id="ZUh-n5-72R"/>
+                                                <constraint firstItem="EtU-NR-pG3" firstAttribute="top" secondItem="yRc-Ge-LLu" secondAttribute="top" id="mHy-7d-uMx"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="titleLabel" destination="EtU-NR-pG3" id="7Ag-LH-Pfp"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Text" id="ki2-wj-WyQ" customClass="StepTextCell" customModule="ExposureNotificationApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="78" width="414" height="318.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ki2-wj-WyQ" id="kJ9-3G-se8">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="318.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rp5-2D-4Cq">
+                                                    <rect key="frame" x="20" y="0.0" width="374" height="302.5"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                    <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="jov-DV-93K" id="nGW-PR-rf5"/>
+                                                    </connections>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Rp5-2D-4Cq" secondAttribute="trailing" id="VHO-OA-sgu"/>
+                                                <constraint firstItem="Rp5-2D-4Cq" firstAttribute="leading" secondItem="kJ9-3G-se8" secondAttribute="leadingMargin" id="cyw-gi-Hls"/>
+                                                <constraint firstItem="Rp5-2D-4Cq" firstAttribute="top" secondItem="kJ9-3G-se8" secondAttribute="top" id="vQN-0f-8Lc"/>
+                                                <constraint firstAttribute="bottom" secondItem="Rp5-2D-4Cq" secondAttribute="bottom" constant="16" id="w96-vW-2Dz"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="textView" destination="Rp5-2D-4Cq" id="fEV-tf-b36"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="delegate" destination="jov-DV-93K" id="Gam-2M-MJy"/>
+                                </connections>
+                            </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iyv-Eb-v2O">
                                 <rect key="frame" x="0.0" y="756" width="414" height="140"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -720,14 +743,14 @@
                             <constraint firstAttribute="bottom" secondItem="Iyv-Eb-v2O" secondAttribute="bottom" id="4vw-FH-nIg"/>
                             <constraint firstItem="q50-fJ-4UL" firstAttribute="leading" secondItem="1dY-b6-LBY" secondAttribute="leadingMargin" id="6UW-wU-BnQ"/>
                             <constraint firstItem="Iyv-Eb-v2O" firstAttribute="leading" secondItem="1dY-b6-LBY" secondAttribute="leading" id="6dR-oa-GWI"/>
+                            <constraint firstItem="LV9-es-7mG" firstAttribute="trailing" secondItem="1dY-b6-LBY" secondAttribute="trailing" id="FJM-L4-wtw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="q50-fJ-4UL" secondAttribute="trailing" id="GTf-vW-gap"/>
-                            <constraint firstItem="NfL-tt-MMG" firstAttribute="leading" secondItem="1dY-b6-LBY" secondAttribute="leading" id="Mrd-5Q-UxT"/>
+                            <constraint firstItem="LV9-es-7mG" firstAttribute="top" secondItem="1dY-b6-LBY" secondAttribute="top" id="HHa-Pf-qXV"/>
                             <constraint firstItem="Iyv-Eb-v2O" firstAttribute="trailing" secondItem="1dY-b6-LBY" secondAttribute="trailing" id="NGB-Et-c91"/>
-                            <constraint firstAttribute="bottom" secondItem="NfL-tt-MMG" secondAttribute="bottom" id="Xqs-zR-nbC"/>
-                            <constraint firstAttribute="trailing" secondItem="NfL-tt-MMG" secondAttribute="trailing" id="di1-PT-LoR"/>
+                            <constraint firstItem="LV9-es-7mG" firstAttribute="leading" secondItem="1dY-b6-LBY" secondAttribute="leading" id="O2E-tT-XlG"/>
+                            <constraint firstAttribute="bottom" secondItem="LV9-es-7mG" secondAttribute="bottom" id="O7V-5k-PwM"/>
                             <constraint firstItem="q50-fJ-4UL" firstAttribute="top" secondItem="Iyv-Eb-v2O" secondAttribute="top" constant="16" id="twP-gP-wxb"/>
                             <constraint firstItem="2wo-hO-K6E" firstAttribute="bottom" secondItem="q50-fJ-4UL" secondAttribute="bottom" constant="16" id="z7x-Vi-uNZ"/>
-                            <constraint firstItem="NfL-tt-MMG" firstAttribute="top" secondItem="1dY-b6-LBY" secondAttribute="top" id="zzg-av-e9Y"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2wo-hO-K6E"/>
                     </view>
@@ -737,10 +760,7 @@
                         <outlet property="button1" destination="UzC-FG-0sp" id="Xg5-Xb-I8O"/>
                         <outlet property="buttonBackgroundView" destination="Iyv-Eb-v2O" id="Lcb-3N-I1w"/>
                         <outlet property="buttonStackView" destination="q50-fJ-4UL" id="AXC-aF-MJn"/>
-                        <outlet property="scrollView" destination="NfL-tt-MMG" id="Ksb-q1-I77"/>
-                        <outlet property="stackView" destination="MSh-GC-ahs" id="RKm-Q3-PqF"/>
-                        <outlet property="textView" destination="aXj-zM-OXi" id="eMO-s4-Qov"/>
-                        <outlet property="titleLabel" destination="z5m-fH-M2D" id="j3P-sz-Q3D"/>
+                        <outlet property="tableView" destination="LV9-es-7mG" id="et2-0I-fyx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yJh-2T-jfY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -905,8 +925,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="x1e-E6-RkV"/>
-        <segue reference="fNl-j7-3cK"/>
+        <segue reference="Fxh-fZ-ufg"/>
+        <segue reference="teQ-lr-UbL"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="exclamationmark.shield.fill" catalog="system" width="128" height="121"/>
