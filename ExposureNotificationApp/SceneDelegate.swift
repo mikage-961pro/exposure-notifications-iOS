@@ -33,7 +33,7 @@ class WatermarkWindow: UIWindow {
     override init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
         
-        watermark.text = "REFERENCE ONLY"
+        watermark.text = ""
         watermark.font = .boldSystemFont(ofSize: 48.0)
         watermark.textColor = .quaternaryLabel
         watermark.translatesAutoresizingMaskIntoConstraints = false
