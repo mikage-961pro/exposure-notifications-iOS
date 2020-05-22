@@ -32,328 +32,336 @@ All strings for the project, separated for localization.
 "RECOMMEND_EXPOSURE_TITLE" = "暴露通知は強く推奨されます";
 
 /* Text */
-"RECOMMEND_EXPOSURE_TEXT" = "{Actual copy to be provided by Public Health Authority}";
+"RECOMMEND_EXPOSURE_TEXT" = "{公衆衛生局から提供される実際のコピー}";
 
 /* Onboarding title */
 "RECOMMEND_PUSH_TITLE" = "プッシュ通知を強くお勧めします";
 
 /* Onboarding text */
-"RECOMMEND_PUSH_TEXT" = "{Actual copy to be provided by Public Health Authority}";
+"RECOMMEND_PUSH_TEXT" = "{公衆衛生局から提供される実際のコピー}";
 
 /* Title */
-"NOTIFYING_OTHERS_TITLE" = "It's Important To Your Community To Share A Positive Diagnosis";
+"NOTIFYING_OTHERS_TITLE" = "肯定的な診断を共有することは、コミュニティにとって重要です。";
 
 /* Text */
-"NOTIFYING_OTHERS_TEXT" = "{Actual copy to be provided by Public Health Authority}
+"NOTIFYING_OTHERS_TEXT" = "{公衆衛生局から提供される実際のコピー}
 
 COVID-19を引き起こすウイルスが陽性であるとテストした場合、診断を共有することを選択できます。これは、コミュニティの他のユーザーがウイルスの蔓延を封じ込めるのに役立ちます。";
 
 
 /* Header */
-"EXPOSURE_NOTIFICATION_OFF" = "Exposure Notifications Are Turned Off";
+"EXPOSURE_NOTIFICATION_OFF" = "露出通知がオフ";
 
 /* Header */
-"EXPOSURE_NOTIFICATION_DISABLED_DIRECTIONS" = "You will not be notified if you are exposed to COVID-19 until Exposure Notifications are turned on.";
+"EXPOSURE_NOTIFICATION_DISABLED_DIRECTIONS" = "露出通知がオンになるまで、COVID-19にさらされても通知されません。";
 
 /* Header */
-"EXPOSURE_NOTIFICATION_DENIED_DIRECTIONS" = "Go to Settings to turn on Exposure Notifications.";
+"EXPOSURE_NOTIFICATION_DENIED_DIRECTIONS" = "[設定]に移動して、露出通知をオンにします。";
 
 /* Header */
-"EXPOSURE_NOTIFICATION_BLUETOOTH_OFF_DIRECTIONS" = "You will not be notified if you are exposed to COVID-19 until Exposure Notifications are turned on. Go to Bluetooth in Settings to turn on Bluetooth, or tap the Bluetooth toggle in Control Center.";
+"EXPOSURE_NOTIFICATION_BLUETOOTH_OFF_DIRECTIONS" = "
+露出通知がオンになるまで、COVID-19にさらされても通知されません。[設定]で[Bluetooth]に移動してBluetoothをオンにするか、コントロールセンター[Bluetooth]トグルをタップします。";
 
 /* Button */
-"EXPOSURE_NOTIFICATION_DISABLED_ACTION" = "Turn On Exposure Notifications";
+"EXPOSURE_NOTIFICATION_DISABLED_ACTION" = "露出通知をオンにする";
 
 /* Value */
-"EXPOSURE_NOTIFICATION_STATE_ON" = "On";
+"EXPOSURE_NOTIFICATION_STATE_ON" = "オン";
 
 /* Value */
-"EXPOSURE_NOTIFICATION_STATE_OFF" = "Off";
+"EXPOSURE_NOTIFICATION_STATE_OFF" = "オフ";
 
 /* Value */
-"EXPOSURE_NOTIFICATION_STATE_BLUETOOTH_OFF" = "Bluetooth Off";
+"EXPOSURE_NOTIFICATION_STATE_BLUETOOTH_OFF" = "Bluetooth オフ";
 
 /* Value */
-"EXPOSURE_NOTIFICATION_STATE_RESTRICTED" = "Restricted";
+"EXPOSURE_NOTIFICATION_STATE_RESTRICTED" = "制限付き";
 
 /* Value */
-"EXPOSURE_NOTIFICATION_STATE_UNKNOWN" = "Unknown";
+"EXPOSURE_NOTIFICATION_STATE_UNKNOWN" = "不明";
 
 /* Footer */
-"EXPOSURE_YOU_WILL_BE_NOTIFIED" = "You will be notified if you are exposed to COVID-19.";
+"EXPOSURE_YOU_WILL_BE_NOTIFIED" = "COVID-19にさらされた場合は通知されます。";
 
 /* Footer */
-"EXPOSURE_YOU_WILL_NOT_BE_NOTIFIED" = "You will not be notified if you are exposed to COVID-19.";
+"EXPOSURE_YOU_WILL_NOT_BE_NOTIFIED" = "COVID-19にさらされても、通知されません。";
 
 /* Footer */
-"EXPOSURE_DETECTION_ERROR" = "An error occurred during exposure detection: %@";
+"EXPOSURE_DETECTION_ERROR" = "露出検出中にエラーが発生しました： %@";
 
 /* Footer */
-"EXPOSURE_LAST_CHECKED" = "Exposure last checked %@.";
+"EXPOSURE_LAST_CHECKED" = "最後に確認した露出 %@.";
 
 /* Header */
-"EXPOSURE_PAST_14_DAYS" = "Exposures in Past 14 Days";
+"EXPOSURE_PAST_14_DAYS" = "過去14日間の暴露";
 
 /* Text */
-"POSSIBLE_EXPOSURE" = "Possible Exposure";
+"POSSIBLE_EXPOSURE" = "可能性のある露出";
 
 
 /* Title */
-"EXPOSURE_INFO_TITLE" = "Exposure Notifications";
+"EXPOSURE_INFO_TITLE" = "暴露通知";
 
 /* Text */
-"EXPOSURE_INFO_TEXT" = "{Actual copy to be provided by Public Health Authority}
+"EXPOSURE_INFO_TEXT" = "{公衆衛生局から提供される実際のコピー}
 
-You can manage Exposure Notifications in %@.
+露出通知は次の場所で管理できます。 %@.
 
 %@";
 
 /* Requirement text */
-"EXPOSURE_INFO_REQUIREMENT_TEXT" = "• Inform users that they can choose to enable Exposure Notifications, as well as that they can disable them at any time.
+"EXPOSURE_INFO_REQUIREMENT_TEXT" = "•露出通知を有効にすることを選択できること、およびいつでも無効にできることをユーザーに通知します。
 
-• Explain that this only works with other devices that have Exposure Notifications turned on.
+•これは、露出通知がオンになっている他のデバイスでのみ機能することを説明します。
 
-• Explain the use of Random IDs, including what they are, how they’re shared and collected, and the privacy protections associated with them.
+•ランダムIDの使用方法、それらが何であるか、どのように共有および収集されるか、およびそれらに関連するプライバシー保護を説明する。
 
-• Explain how a user can be notified of an exposure event (including time), as well as the fact that exposure details (date, duration, and signal strength) will be shared with you.
+•露出イベント（時間を含む）をユーザーに通知する方法と、露出の詳細（日付、期間、信号強度）が共有されることを説明します。
 
-• Include an explanation of how a user may work with you to submit a positive diagnosis, with their consent.";
-
-/* Title */
-"EXPOSURE_ABOUT_TITLE" = "About Exposure Notifications";
-
-/* Text */
-"EXPOSURE_ABOUT_TEXT" = "{Actual copy to be provided by Public Health Authority}";
-
+•ユーザーが同意を得て、肯定的な診断を提出するためにユーザーがどのように協力するかについての説明を含めます。";
 
 /* Title */
-"EXPOSURE_DETAILS_TITLE" = "Possible Exposure";
+"EXPOSURE_ABOUT_TITLE" = "露出通知について";
 
 /* Text */
-"EXPOSURE_DETAILS_TEXT" = "{Actual copy to be provided by Public Health Authority}
+"EXPOSURE_ABOUT_TEXT" = "Exposure Notification技術は公衆衛生機関が利用でき、Android 及び iOS 搭載端末上で動作します。両社が開発したものはアプリではなく、公衆衛生機関が独自に開発するアプリに組み込むための API です。Apple と Googleが提供する技術は、上記のようなアプリがより効果的に機能するように設計されています。
 
-You were near someone %@ who has shared their positive diagnosis of COVID-19.";
+例えば、この技術は端末の位置情報を収集・利用しないだけでなく、さらにユーザーは Exposure Notification の機能を有効にするかどうか自体を選択することができます。
+
+新型コロナウイルス感染症に罹患した人が、公衆衛生機関が提供するアプリで陽性の診断を報告するかどうかも、ユーザー次第です。
+
+この技術の成功は、ユーザーの利用にかかっており、私たちはこれらの強力なプライバシー保護が、そうしたアプリの利用を促進する上で最良のアプローチであると考えています。";
+
+
+/* Title */
+"EXPOSURE_DETAILS_TITLE" = "可能性のある露出";
+
+/* Text */
+"EXPOSURE_DETAILS_TEXT" = "濃厚接触者になり、感染している可能性があります。
+
+あなたは、%@、COVID-19の陽性の診断を共有している誰かの近くにいました。";
 
 /* Header */
-"EXPOSURE_DETAILS_HEADER" = "Details";
+"EXPOSURE_DETAILS_HEADER" = "詳細";
 
 /* Text */
-"EXPOSURE_DETAILS_DIAGNOSIS_VERIFICATION" = "This person’s diagnosis was verified";
+"EXPOSURE_DETAILS_DIAGNOSIS_VERIFICATION" = "この人の診断は確認されました。";
 
 /* Header */
-"EXPOSURE_NEXT_STEPS_HEADER" = "Next Steps";
+"EXPOSURE_NEXT_STEPS_HEADER" = "次のステップ";
 
 /* Text */
-"EXPOSURE_NEXT_STEPS_TEXT" = "{Actual copy to be provided by Public Health Authority}
+"EXPOSURE_NEXT_STEPS_TEXT" = "14日間は、一日2回の体温測定と、発熱、咳、倦怠感などの症状が出現しないか注意して過ごしましょう。
 
+2週間の間に、新型コロナウイルス感染症を疑われる方は、各自治体の「帰国者・接触者電話相談センターまたは新型コロナ受診相談窓口」にご相談ください。
 
-
-";
+各自治体の帰国者・接触者電話相談センターまたは新型コロナ受診相談窓口でご相談の結果、新型コロナウイルス感染の疑いのある場合には、専門の「発熱外来」をご紹介しています。マスクを着用し、公共交通機関の利用を避けて受診してください。";
 
 /* Footnote */
-"EXPOSURE_FOOTNOTE" = "This report has been saved to this app and you can access it at any time in the future.";
+"EXPOSURE_FOOTNOTE" = "このレポートはこのアプリに保存されており、いつでもアクセスできます。";
 
 
 /* Text */
-"EXPOSURE_DETAILS_DATE_TEXT" = "You were near this person on %@";
+"EXPOSURE_DETAILS_DATE_TEXT" = "%@、あなたはこの人の近くにいました。";
 
 
 /* Title */
-"EXPOSURE_DETAILS_LEARN_TITLE" = "About Verified Test Results";
+"EXPOSURE_DETAILS_LEARN_TITLE" = "検証済みのテスト結果について";
 
 /* Text */
-"EXPOSURE_DETAILS_LEARN_TEXT" = "{Actual copy to be provided by Public Health Authority}";
+"EXPOSURE_DETAILS_LEARN_TEXT" = "{公衆衛生局から提供される実際のコピー}";
 
 
 /* Header */
 "NOTIFY_OTHERS_DESCRIPTION" = "COVID-19を引き起こすウイルスが陽性であるとテストした場合、診断を共有することを選択できます。これは、コミュニティの他のユーザーがウイルスの蔓延を封じ込めるのに役立ちます。";
 
 /* Header */
-"NOTIFY_OTHERS_DISABLED_DIRECTIONS" = "You can’t share your positive diagnosis until Exposure Notifications are turned on.";
+"NOTIFY_OTHERS_DISABLED_DIRECTIONS" = "露出通知がオンになるまで、肯定的な診断を共有することはできません";
 
 /* Header */
-"NOTIFY_OTHERS_DENIED_DIRECTIONS" = "You can’t share your positive diagnosis until Exposure Notifications are turned on.
+"NOTIFY_OTHERS_DENIED_DIRECTIONS" = "露出通知がオンになるまで、肯定的な診断を共有することはできません。
 
-Go to Settings to turn on Exposure Notifications.";
+[設定]に移動して、露出通知をオンにします。";
 
 /* Header */
-"NOTIFY_OTHERS_HEADER" = "Share a Positive Diagnosis";
+"NOTIFY_OTHERS_HEADER" = "診断を共有する";
 
 /* Button */
-"NOTIFY_OTHERS_ACTION" = "Share a Positive Diagnosis";
+"NOTIFY_OTHERS_ACTION" = "診断を共有する";
 
 /* Header */
-"POSITIVE_DIAGNOSES" = "Positive Diagnoses";
+"POSITIVE_DIAGNOSES" = "肯定的な診断";
 
 
 /* Title */
-"VERIFICATION_START_TITLE" = "Before You Get Started";
+"VERIFICATION_START_TITLE" = "始める前に";
 
 /* Text */
-"VERIFICATION_START_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_START_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}";
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}";
 
 /* Requirement text */
-"VERIFICATION_START_REQUIREMENT_TEXT" = "These points must be covered in this screen before asking the user for access:
+"VERIFICATION_START_REQUIREMENT_TEXT" = "ユーザーにアクセスを要求する前に、これらの点をこの画面でカバーする必要があります。
 
-• Explain this is optional and can only be done with user’s consent.
+•これはオプションであり、ユーザーの同意がある場合にのみ実行できることを説明します。
 
-• Explain the value of notifying others of a positive diagnosis.
+•他の人に肯定的な診断を通知することの価値を説明する。
 
-• Explain how the Random IDs will be used to notify others of an exposure.
+•ランダムIDを使用して他の人にエクスポージャーを通知する方法を説明します。
 
-• What will be shared and what will not be shared (random IDs). If you are calculating any sort of exposure risk value, explain clearly how your risk value is calculated.";
+•共有されるものと共有されないもの（ランダムID）。何らかのリスク値を計算する場合は、リスク値の計算方法を明確に説明してください。";
 
 /* Title */
-"VERIFICATION_IDENTIFIER_TITLE" = "Verify Your Positive Diagnosis";
+"VERIFICATION_IDENTIFIER_TITLE" = "あなたの肯定的な診断を確認してください";
 
 /* Text */
-"VERIFICATION_IDENTIFIER_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_IDENTIFIER_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}
 
-The unique test identifier that came with your COVID-19 test can be used to verify your positive diagnosis.
+COVID-19テストに付属の一意のテスト識別子を使用して、陽性の診断を検証できます。
 
 %@";
 
 /* Label */
-"VERIFICATION_IDENTIFIER_ENTRY_LABEL" = "Unique Test Identifier";
+"VERIFICATION_IDENTIFIER_ENTRY_LABEL" = "一意のテスト識別子";
 
 /* Label */
-"VERIFICATION_IDENTIFIER_DEVELOPER" = "For Developers: Example code is 000000";
+"VERIFICATION_IDENTIFIER_DEVELOPER" = "開発者向け：コード例は000000です";
 
 /* Alert title */
-"VERIFICATION_IDENTIFIER_INVALID" = "Unable to Verify Identifier";
+"VERIFICATION_IDENTIFIER_INVALID" = "識別子を確認できません";
 
 /* Title */
-"VERIFICATION_IDENTIFIER_ABOUT_TITLE" = "About Test Identifiers";
+"VERIFICATION_IDENTIFIER_ABOUT_TITLE" = "テスト識別子について";
 
 /* Text */
-"VERIFICATION_IDENTIFIER_ABOUT_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_IDENTIFIER_ABOUT_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}";
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}";
 
 /* Title */
-"VERIFICATION_ADMINISTRATION_DATE_TITLE" = "When did you take the test?";
+"VERIFICATION_ADMINISTRATION_DATE_TITLE" = "いつ試験を受けましたか？";
 
 /* Text */
-"VERIFICATION_ADMINISTRATION_DATE_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_ADMINISTRATION_DATE_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}
 
-The test date helps the app know when you may have been infectious and notify the right people of possible exposure.";
+テストの日付は、感染した可能性のある時期をアプリが認識し、適切な人々に暴露の可能性を通知するのに役立ちます。";
 
 /* Label */
-"VERIFICATION_ADMINISTRATION_DATE_LABEL" = "Date";
+"VERIFICATION_ADMINISTRATION_DATE_LABEL" = "日付";
 
 /* Value */
-"VERIFICATION_ADMINISTRATION_DATE_NOT_SET" = "Tap to enter date";
+"VERIFICATION_ADMINISTRATION_DATE_NOT_SET" = "
+日付を入力するにはタップします。";
 
 /* Title */
-"VERIFICATION_REVIEW_TITLE" = "Review your answers";
+"VERIFICATION_REVIEW_TITLE" = "回答を確認してください。";
 
 /* Text */
-"VERIFICATION_REVIEW_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_REVIEW_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}";
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}";
 
 /* Title */
-"VERIFICATION_SHARED_TITLE" = "Your Positive Diagnosis Has Been Shared";
+"VERIFICATION_SHARED_TITLE" = "あなたの肯定的な診断は共有されました。";
 
 /* Text */
-"VERIFICATION_SHARED_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_SHARED_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}";
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}";
 
 /* Title */
-"VERIFICATION_NOT_SHARED_TITLE" = "Your Positive Diagnosis Has Been Saved to Your Phone. You Can Share This Diagnosis at Any Time.";
+"VERIFICATION_NOT_SHARED_TITLE" = "あなたの肯定的な診断はあなたの電話に保存されました。この診断はいつでも共有できます。";
 
 /* Text */
-"VERIFICATION_NOT_SHARED_TEXT" = "{Actual copy to be provided by Public Health Authority
+"VERIFICATION_NOT_SHARED_TEXT" = "{公衆衛生局から提供される実際のコピー
 
-This example flow assumes a test for the entirety of the flow, but could be confirmed by a diagnosis as well.}";
+    この例のフローは、フロー全体のテストを前提としていますが、診断によって確認することもできます。}";
 
 
 /* Header */
-"TEST_RESULT_DETAILS" = "Details";
+"TEST_RESULT_DETAILS" = "詳細";
 
 /* Value */
-"TEST_RESULT_STATE_SHARED" = "Shared";
+"TEST_RESULT_STATE_SHARED" = "共有";
 
 /* Value */
-"TEST_RESULT_STATE_NOT_SHARED" = "Not Shared";
+"TEST_RESULT_STATE_NOT_SHARED" = "共有されていません";
 
 /* Label */
-"TEST_RESULT_DIAGNOSIS" = "Diagnosis";
+"TEST_RESULT_DIAGNOSIS" = "診断";
 
 /* Value */
-"TEST_RESULT_DIAGNOSIS_POSITIVE" = "COVID-19 Positive";
+"TEST_RESULT_DIAGNOSIS_POSITIVE" = "COVID-19 陽性";
 
 /* Label */
-"TEST_RESULT_ADMINISTRATION_DATE" = "Test Administered On";
+"TEST_RESULT_ADMINISTRATION_DATE" = "テスト管理者";
 
 /* Button */
-"TEST_RESULT_SHARE" = "Share Positive Diagnosis";
+"TEST_RESULT_SHARE" = "陽性診断を共有する";
 
 /* Disabled button */
-"TEST_RESULT_SHARED" = "Positive Diagnosis Shared";
+"TEST_RESULT_SHARED" = "肯定的な診断を共有";
 
 /* Button */
-"TEST_RESULT_DELETE" = "Delete Positive Diagnosis";
+"TEST_RESULT_DELETE" = "肯定的な診断を削除";
 
 /* Alert title */
-"TEST_RESULT_DELETE_ALERT" = "Are you sure you want to delete your positive diagnosis? This will permanently remove this diagnosis from your device.";
+"TEST_RESULT_DELETE_ALERT" = "肯定的な診断を削除してもよろしいですか？これにより、この診断がデバイスから完全に削除されます。";
 
 
 /* Title */
-"ERROR" = "Error";
+"ERROR" = "エラー：";
 
 /* Button */
 "OK" = "OK";
 
 /* Button */
-"GET_STARTED" = "Get Started";
+"GET_STARTED" = "始めましょう";
 
 /* Button */
-"CONTINUE" = "Continue";
+"CONTINUE" = "続ける";
 
 /* Button */
-"NEXT" = "Next";
+"NEXT" = "次へ";
 
 /* Button */
-"ENABLE" = "Enable";
+"ENABLE" = "有効にする";
 
 /* Button */
-"DONT_ENABLE" = "Don’t Enable";
+"DONT_ENABLE" = "有効にしない";
 
 /* Button */
-"GO_TO_SETTINGS" = "Go to Settings";
+"GO_TO_SETTINGS" = "設定に移動";
 
 /* Button */
-"NOT_NOW" = "Not Now";
+"NOT_NOW" = "今はしない";
 
 /* Button */
-"CANCEL" = "Cancel";
+"CANCEL" = "キャンセル";
 
 /* Button */
-"DONE" = "Done";
+"DONE" = "完了";
 
 /* Link */
-"LEARN_MORE" = "Learn more";
+"LEARN_MORE" = "もっと詳しく";
 
 /* Link */
-"SETTINGS" = "Settings";
+"SETTINGS" = "設定";
 
 
 /* Error */
-"BACKGROUND_TIMEOUT" = "Ran out of background time.";
+"BACKGROUND_TIMEOUT" = "バックグラウンドタイムが不足しています。";
 
 /* User notification */
-"USER_NOTIFICATION_EXPLANATION" = "{Actual copy to be provided by Public Health Authority}";
+"USER_NOTIFICATION_EXPLANATION" = "{公衆衛生局から提供される実際のコピー}";
 
 /* User notification title */
-"USER_NOTIFICATION_BLUETOOTH_OFF_TITLE" = "Bluetooth Off";
+"USER_NOTIFICATION_BLUETOOTH_OFF_TITLE" = "Bluetooth OFF";
 
 /* User notification */
-"USER_NOTIFICATION_BLUETOOTH_OFF_BODY" = "Turn on Bluetooth to continue using COVID-19 Exposure Logging and Notifications.";
+"USER_NOTIFICATION_BLUETOOTH_OFF_BODY" = "COVID-19の露出ログと通知を引き続き使用するには、Bluetoothをオンにします。";
